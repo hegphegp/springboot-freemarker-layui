@@ -17,7 +17,7 @@ spring.freemarker.request-context-attribute: request
 
 spring.freemarker.suffix: .ftl
 
-logging.level.root: WARN
+#logging.level.root: WARN
 #logging.level.org.springframework.web: DEBUG
 #logging.level.org.hibernate: ERROR
 

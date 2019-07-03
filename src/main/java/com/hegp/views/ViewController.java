@@ -10,17 +10,27 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 
+/** 每个页面的URL单独配置一个@GetMapping接口，显得很傻逼，用通配符的方式映射 */
 @Controller
 public class ViewController {
 
-    @GetMapping("/back-end/index.html")
-    public ModelAndView index(HttpServletRequest request) {
+    /**
+     * 一个星号通配符只能匹配一层URL，两个星号通配符可以匹配多层URL
+     * @param request
+     * @return
+     */
+    @GetMapping(value={"/back-end/**","/front-end/**"})
+    public ModelAndView page(HttpServletRequest request) {
         getCurrentIpAddress();
-        System.out.println(request.getContextPath());
-        ModelAndView view = new ModelAndView("/back-end/users/index");
+        String requestURI = request.getRequestURI();
+        if (requestURI.endsWith(".html")) {
+            requestURI = requestURI.substring(0, requestURI.length()-5);
+        } else if (requestURI.endsWith(".htm")){
+            requestURI = requestURI.substring(0, requestURI.length()-4);
+        }
+        ModelAndView view = new ModelAndView(requestURI);
         return view;
     }
-
 
     // 经过转发后，获取不到请求路径
     public String getCurrentIpAddress() {
