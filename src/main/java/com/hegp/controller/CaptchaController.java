@@ -27,7 +27,7 @@ public class CaptchaController {
     public void init() throws IOException, FontFormatException {
         File file = ResourcesUtils.getFileByPath(fontFilePath);
         font = Font.createFont(Font.TRUETYPE_FONT, file);
-        font = font.deriveFont(Font.PLAIN+Font.ITALIC, 25);
+        font = font.deriveFont(Font.PLAIN+Font.ITALIC+Font.BOLD, 33);
     }
 
     /**

@@ -47,8 +47,11 @@ public class DynamicProjectPathFilter extends OncePerRequestFilter {
             }
         }
         dynamicProjectPath += StringUtils.hasText(contextPath)? contextPath:"";
+        String host = request.getHeader("Host");
         if (StringUtils.hasText(dynamicProjectPath)) {
             request.setAttribute("dynamicProjectPath", dynamicProjectPath);
+        } else if (StringUtils.hasText(host)) {
+            request.setAttribute("dynamicProjectPath", scheme+"://"+host);
         }
         filterChain.doFilter(request, response);
     }

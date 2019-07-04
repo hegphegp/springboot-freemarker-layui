@@ -21,7 +21,7 @@ public class ViewController {
      */
     @GetMapping(value={"/back-end/**","/front-end/**"})
     public ModelAndView page(HttpServletRequest request) {
-        getCurrentIpAddress();
+//        getCurrentIpAddress();
         String requestURI = request.getRequestURI();
         if (requestURI.endsWith(".html")) {
             requestURI = requestURI.substring(0, requestURI.length()-5);

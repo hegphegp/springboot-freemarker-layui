@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,8 +16,8 @@
 
     <div class="layadmin-user-login-main">
         <div class="layadmin-user-login-box layadmin-user-login-header">
-            <h2>layuiAdmin</h2>
-            <p>layui 官方出品的单页面后台管理模板系统</p>
+            <h2>登录系统</h2>
+            <p>登录系统</p>
         </div>
         <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
             <div class="layui-form-item">
@@ -38,7 +36,7 @@
                     </div>
                     <div class="layui-col-xs5">
                         <div style="margin-left: 10px;">
-                            <img src="${Request.dynamicProjectPath!""}/captcha" class="layadmin-user-login-codeimg" id="LAY-user-get-vercode">
+                            <img src="${Request.dynamicProjectPath!""}/captcha" class="layadmin-user-login-codeimg" id="login-captcha">
                         </div>
                     </div>
                 </div>
@@ -62,16 +60,15 @@
     </div>
 
     <div class="layui-trans layadmin-user-login-footer">
-
         <p>© 2018 <a href="http://www.layui.com/" target="_blank">layui.com</a></p>
-        <p>
-            <span><a href="http://www.layui.com/admin/#get" target="_blank">获取授权</a></span>
-            <span><a href="http://www.layui.com/admin/pro/" target="_blank">在线演示</a></span>
-            <span><a href="http://www.layui.com/admin/" target="_blank">前往官网</a></span>
-        </p>
+        <#--<p>-->
+            <#--<span><a href="http://www.layui.com/admin/#get" target="_blank">获取授权</a></span>-->
+            <#--<span><a href="http://www.layui.com/admin/pro/" target="_blank">在线演示</a></span>-->
+            <#--<span><a href="http://www.layui.com/admin/" target="_blank">前往官网</a></span>-->
+        <#--</p>-->
     </div>
 
-    <!--<div class="ladmin-user-login-theme">
+    <div class="ladmin-user-login-theme">
       <script type="text/html" template>
         <ul>
           <li data-theme=""><img src="{{ layui.setter.base }}style/res/bg-none.jpg"></li>
@@ -82,12 +79,10 @@
           <li data-theme="#20222A" style="background-color: #20222A;"></li>
         </ul>
       </script>
-    </div>-->
+    </div>
 
 </div>
 
-<#--<script src="${Request.dynamicProjectPath!""}/plugins/jquery/v1.12.4/jquery.min.js"></script>-->
-<#--<script src="${Request.dynamicProjectPath!""}/plugins/layui/v2.4.5/lay/modules/jquery.js"></script>-->
 <script src="${Request.dynamicProjectPath!""}/plugins/layui/v2.4.5/layui.all.js"></script>
 <script type="text/javascript">
     // $(function(){
@@ -104,11 +99,14 @@
 
     (function() {
         var $ = layui.$ //重点处
-        console.log("-0000000000000000000000000000");
         var layer = layui.layer;
         layer.msg('Hello World');
-        alert('jQuery版本：' + $.fn.jquery);
+        layer.msg('jQuery版本：' + $.fn.jquery);
         // alert("userName");
+        // 图形验证码
+        $('#login-captcha').click(function () {
+            this.src = '${Request.dynamicProjectPath!""}/captcha?t=' + (new Date).getTime();
+        });
     })()
 
     // (function() {
