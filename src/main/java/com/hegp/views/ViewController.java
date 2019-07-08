@@ -19,7 +19,7 @@ public class ViewController {
      * @param request
      * @return
      */
-    @GetMapping(value={"/back-end/**","/front-end/**"})
+    @GetMapping(value={"/back-end/**","/front-end/**","/test-examples/**"})
     public ModelAndView page(HttpServletRequest request) {
 //        getCurrentIpAddress();
         String requestURI = request.getRequestURI();
