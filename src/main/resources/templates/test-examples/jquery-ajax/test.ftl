@@ -29,17 +29,13 @@
                 contentType: "application/x-www-form-urlencoded; charset=UTF-8", // 设置请求参数以什么方式传输，如application/json，application/x-www-form-urlencoded，application/form-data
                 success:function(data) {
                     if(data.code == 200 ) {
-                        var layer = layui.layer;
-                        layer.msg("修改成功！"+JSON.stringify(data));
+                        layui.layer.msg("修改成功！"+JSON.stringify(data));
                     } else {
-                        var layer = layui.layer;
-                        layer.msg("修改失败！"+JSON.stringify(data));
+                        layui.layer.msg("修改失败！"+JSON.stringify(data));
                     }
                 },
                 error:function(XMLHttpRequest, textStatus, errorThrown){
-                    alert("请求对象XMLHttpRequest: "+XMLHttpRequest);
-                    alert("错误类型textStatus: "+textStatus);
-                    alert("异常对象errorThrown: "+errorThrown);
+                    layui.layer.msg("请求对象XMLHttpRequest: "+XMLHttpRequest+"错误类型textStatus: "+textStatus+"异常对象errorThrown: "+errorThrown);
                     console.log(errorThrown);
                 }
             });

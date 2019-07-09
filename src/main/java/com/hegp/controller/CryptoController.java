@@ -8,7 +8,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/v1/crypto")
 public class CryptoController {
-    @PostMapping(value = "/test")
+    @PostMapping(value = "/x-www-form-urlencoded")
     public Map test(@RequestParam(name="username", required = false) String username,
                     @RequestParam(name="password", required = false) String password) {
         Map responeResult = new HashMap();
