@@ -25,7 +25,7 @@ public class ViewController {
         String requestURI = request.getRequestURI();
         if (requestURI.endsWith(".html")) {
             requestURI = requestURI.substring(0, requestURI.length()-5);
-        } else if (requestURI.endsWith(".htm")){
+        } else if (requestURI.endsWith(".htm")) {
             requestURI = requestURI.substring(0, requestURI.length()-4);
         }
         ModelAndView view = new ModelAndView(requestURI);
