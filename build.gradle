@@ -37,8 +37,6 @@ repositories {
 }
 
 dependencies {
-    compile 'commons-codec:commons-codec:1.10'
-    compile 'org.apache.commons:commons-lang3:3.4'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-freemarker'
 //    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'

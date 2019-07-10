@@ -1,7 +1,7 @@
 package com.hegp.controller.cipher;
 
 import com.hegp.core.domain.RequestResponse;
-import com.hegp.core.utiils.Aes;
+import com.hegp.core.utiils.AESSuccessUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +22,8 @@ public class AESController {
 //        System.out.println(loginParams.getUsername()+"  解密后===>>>  "+ AESUtils.decrypt(loginParams.getUsername(), sKey, ivParameter));
 //        System.out.println(loginParams.getPassword()+"  解密后===>>>  "+ AESUtils.decrypt(loginParams.getPassword(), sKey, ivParameter));
 
-        System.out.println(loginParams.getUsername()+"  解密后===>>>  "+ Aes.aesDecrypt(loginParams.getUsername(), sKey));
-        System.out.println(loginParams.getPassword()+"  解密后===>>>  "+ Aes.aesDecrypt(loginParams.getPassword(), sKey));
+        System.out.println(loginParams.getUsername()+"  解密后===>>>  "+ AESSuccessUtils.aesDecrypt(loginParams.getUsername(), sKey));
+        System.out.println(loginParams.getPassword()+"  解密后===>>>  "+ AESSuccessUtils.aesDecrypt(loginParams.getPassword(), sKey));
         Map map = new HashMap();
         map.put("username", loginParams.getUsername());
         map.put("password", loginParams.getPassword());
