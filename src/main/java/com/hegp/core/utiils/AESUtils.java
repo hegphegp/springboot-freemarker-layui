@@ -9,8 +9,16 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
 /**
- * AES 是一种可逆加密算法，对用户的敏感信息加密处理 对原始数据进行AES加密后，在进行Base64编码转化；
+ * 可怕的现实,可怕的世界.没任何人解释怎么写,怎么配.全都通过浪费生命(时间)来测试验证
+ * 1) java 使用PKCS5Padding填充最后加密的结果也跟Python等语言加密的结果不太一样,原本想放弃这种方式的, 却发现全世界的crypto-js博客都是前端用CryptoJS.pad.Pkcs7, 后端用PKCS5Padding
+ * 2) java 不支持PKCS7Padding
  */
+/**
+ * 众所周知，java填充方式没有PKCS7Padding，而且java使用PKCS5Padding填充最后加密的结果也跟Python等语言加密的结果不太一样，
+ * 往往只有前半段相同，后半段不同，像openresty默认的填充方式是PKCS7Padding，那么java的加密结果跟lua的加密结果就更对不上了，
+ * 对于两者交互产生了很大的问题。
+ */
+
 public class AESUtils {
 
     private static Base64.Encoder encoder = Base64.getEncoder();
@@ -20,10 +28,9 @@ public class AESUtils {
     // 加密
     public static String encrypt(String encData, String secretKey, String vector) throws Exception {
         Assert.isTrue(secretKey!=null&&secretKey.length()>0, "密钥不允许为空");
-        Assert.isTrue(secretKey.length() == 16, "密钥必须是16位");
+        Assert.isTrue(secretKey.getBytes("utf-8").length == 16, "密钥.getBytes()后必须是16位");
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        byte[] raw = secretKey.getBytes();
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+        SecretKeySpec skeySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
         IvParameterSpec iv = new IvParameterSpec(vector.getBytes());// 使用CBC模式，需要一个向量iv，可增加加密算法的强度
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
         byte[] encrypted = cipher.doFinal(encData.getBytes("utf-8"));
@@ -31,8 +38,7 @@ public class AESUtils {
     }
 
     public static String decrypt(String sSrc, String key, String ivs) throws Exception {
-        byte[] raw = key.getBytes("ASCII");
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+        SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes(), "AES");
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         IvParameterSpec iv = new IvParameterSpec(ivs.getBytes());
         cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
@@ -43,24 +49,18 @@ public class AESUtils {
 
     public static void main(String[] args) throws Exception {
         // 需要加密的字串
-        String cSrc = "[{\"request_no\":\"1001\",\"service_code\":\"FS0001\",\"contract_id\":\"100002\",\"order_id\":\"0\",\"phone_id\":\"13913996922\",\"plat_offer_id\":\"100094\",\"channel_id\":\"1\",\"activity_id\":\"100045\"}]";
-
-        /** 加密用的Key 可以用26个字母和数字组成 此处使用AES-128-CBC加密模式，key需要为16位。 */
-        String sKey = "smkldospdosldaaa";//key，可自行修改，必须是16位。
-        String ivParameter = "0392039203920300";//偏移量,可自行修改
+//        String cSrc = "[{\"request_no\":\"1001\",\"service_code\":\"FS0001\",\"contract_id\":\"100002\",\"order_id\":\"0\",\"phone_id\":\"13913996922\",\"plat_offer_id\":\"100094\",\"channel_id\":\"1\",\"activity_id\":\"100045\"}]";
+        String cSrc = "username";
+        /** 加密用的Key 可以由大小写字母数字组成 此处使用AES-128-CBC加密模式，key需要为16位。 */
+        String sKey = "1234123412ABCDEF";//key，可自行修改，必须是16位。
+        String ivParameter = "ABCDEF1234123412";//偏移量,可自行修改
         // 加密
-        long lStart = System.currentTimeMillis();
         String enString = encrypt(cSrc, sKey, ivParameter);
         System.out.println("加密后的字串是：" + enString);
 
-        long lUseTime = System.currentTimeMillis() - lStart;
-        System.out.println("加密耗时：" + lUseTime + "毫秒");
         // 解密
-        lStart = System.currentTimeMillis();
         String DeString = decrypt(enString, sKey, ivParameter);
         System.out.println("解密后的字串是：" + DeString);
-        lUseTime = System.currentTimeMillis() - lStart;
-        System.out.println("解密耗时：" + lUseTime + "毫秒");
     }
 
 }
