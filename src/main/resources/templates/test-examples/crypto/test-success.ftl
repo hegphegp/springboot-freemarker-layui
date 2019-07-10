@@ -56,7 +56,7 @@
                 headers: {
                     Accept: "application/json; charset=utf-8"
                 },
-                url:'${Request.dynamicProjectPath!""}/v1/crypto/application-json',
+                url:'${Request.dynamicProjectPath!""}/v1/crypto/application-json-success',
                 data: JSON.stringify(jsonData),
                 type:'post',
                 cache:false,

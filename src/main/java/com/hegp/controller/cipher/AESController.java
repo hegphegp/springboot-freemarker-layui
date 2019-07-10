@@ -2,11 +2,9 @@ package com.hegp.controller.cipher;
 
 import com.hegp.core.domain.RequestResponse;
 import com.hegp.core.utiils.AESSuccessUtils;
+import com.hegp.core.utiils.AESUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/crypto")
@@ -19,15 +17,20 @@ public class AESController {
         if (StringUtils.isEmpty(loginParams.getUsername())||StringUtils.isEmpty(loginParams.getPassword())) {
             throw new RuntimeException("username/password不允许为空");
         }
-//        System.out.println(loginParams.getUsername()+"  解密后===>>>  "+ AESUtils.decrypt(loginParams.getUsername(), sKey, ivParameter));
-//        System.out.println(loginParams.getPassword()+"  解密后===>>>  "+ AESUtils.decrypt(loginParams.getPassword(), sKey, ivParameter));
+        System.out.println(loginParams.getUsername()+"  解密后===>>>  "+ AESUtils.decrypt(loginParams.getUsername(), sKey, ivParameter));
+        System.out.println(loginParams.getPassword()+"  解密后===>>>  "+ AESUtils.decrypt(loginParams.getPassword(), sKey, ivParameter));
 
+        return RequestResponse.build(loginParams);
+    }
+
+    @PostMapping(value = "/application-json-success")
+    public RequestResponse applicationJsonSuccess(@RequestBody LoginParams loginParams) throws Exception {
+        if (StringUtils.isEmpty(loginParams.getUsername())||StringUtils.isEmpty(loginParams.getPassword())) {
+            throw new RuntimeException("username/password不允许为空");
+        }
         System.out.println(loginParams.getUsername()+"  解密后===>>>  "+ AESSuccessUtils.aesDecrypt(loginParams.getUsername(), sKey));
         System.out.println(loginParams.getPassword()+"  解密后===>>>  "+ AESSuccessUtils.aesDecrypt(loginParams.getPassword(), sKey));
-        Map map = new HashMap();
-        map.put("username", loginParams.getUsername());
-        map.put("password", loginParams.getPassword());
-        return RequestResponse.build(map);
+        return RequestResponse.build(loginParams);
     }
 
     public static class LoginParams {

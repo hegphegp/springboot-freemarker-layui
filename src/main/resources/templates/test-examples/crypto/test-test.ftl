@@ -25,10 +25,11 @@
      * @param word
      * @returns {*}
      */
-    function encrypt(word, key) {
+    function encrypt(word, key, iv) {
         var key = CryptoJS.enc.Utf8.parse(key);
+        var iv = CryptoJS.enc.Utf8.parse(iv);    //十六位十六进制数作为密钥偏移量
         var srcs = CryptoJS.enc.Utf8.parse(word);
-        var encrypted = CryptoJS.AES.encrypt(srcs, key, {mode:CryptoJS.mode.ECB, padding:CryptoJS.pad.Pkcs7});
+        var encrypted = CryptoJS.AES.encrypt(srcs, key, {iv:iv, mode:CryptoJS.mode.CBC, padding:CryptoJS.pad.Pkcs7});
         return encrypted.toString();
     }
 
@@ -37,9 +38,10 @@
      * @param word
      * @returns {*}
      */
-    function decrypt(word, key) {
+    function decrypt(word, key, iv) {
         var key = CryptoJS.enc.Utf8.parse(key);
-        var decrypt = CryptoJS.AES.decrypt(word, key, {mode:CryptoJS.mode.ECB, padding:CryptoJS.pad.Pkcs7});
+        var iv = CryptoJS.enc.Utf8.parse(iv);    //十六位十六进制数作为密钥偏移量
+        var decrypt = CryptoJS.AES.decrypt(word, key, {iv:iv, mode:CryptoJS.mode.CBC, padding:CryptoJS.pad.Pkcs7});
         return CryptoJS.enc.Utf8.stringify(decrypt).toString();
     }
 
@@ -47,9 +49,10 @@
 
         $("#submitform").on("submit", function(ev) {
             var key = "1234123412ABCDEF";
-            var username = encrypt($("#username").val(), key);
+            var iv = "ABCDEF1234123412";
+            var username = encrypt($("#username").val(), key, iv);
             console.log(username);
-            var password = encrypt($("#password").val(), key);
+            var password = encrypt($("#password").val(), key, iv);
             console.log(password);
             var jsonData = {"username": username, "password": password};
             $.getJSON({
