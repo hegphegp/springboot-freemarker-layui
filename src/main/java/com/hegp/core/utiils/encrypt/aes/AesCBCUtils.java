@@ -1,4 +1,4 @@
-package com.hegp.core.utiils;
+package com.hegp.core.utiils.encrypt.aes;
 
 import org.springframework.util.Assert;
 
@@ -19,38 +19,48 @@ import java.util.Base64;
  * 对于两者交互产生了很大的问题。
  */
 
-public class AESUtils {
+/**
+ * AES/CBC/PKCS5Padding 方式
+ */
+public class AesCBCUtils {
 
     private static Base64.Encoder encoder = Base64.getEncoder();
     private static Base64.Decoder decoder = Base64.getDecoder();
-    private AESUtils() { }
 
-    // 加密
-    public static String encrypt(String encData, String secretKey, String vector) throws Exception {
+    private static final String ALGORITHMSTR = "AES/CBC/PKCS5Padding";
+
+
+    public static byte[] encryptToBytes(String encData, String secretKey, String iv) throws Exception {
         Assert.isTrue(secretKey!=null&&secretKey.length()>0, "密钥不允许为空");
         Assert.isTrue(secretKey.getBytes("utf-8").length == 16, "密钥.getBytes()后必须是16位");
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        Cipher cipher = Cipher.getInstance(ALGORITHMSTR);
         SecretKeySpec skeySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
-        IvParameterSpec iv = new IvParameterSpec(vector.getBytes());// 使用CBC模式，需要一个向量iv，可增加加密算法的强度
-        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
-        byte[] encrypted = cipher.doFinal(encData.getBytes("utf-8"));
-        return encoder.encodeToString(encrypted); // 此处使用BASE64做转码。
+        IvParameterSpec ivParameter = new IvParameterSpec(iv.getBytes());// 使用CBC模式，需要一个向量iv，可增加加密算法的强度
+        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, ivParameter);
+        return cipher.doFinal(encData.getBytes("utf-8"));
     }
 
-    public static String decrypt(String sSrc, String key, String ivs) throws Exception {
+    // 加密
+    public static String encrypt(String encData, String secretKey, String iv) throws Exception {
+        return encoder.encodeToString(encryptToBytes(encData, secretKey, iv)); // 此处使用BASE64做转码。
+    }
+
+    public static String decryptByBytes(byte[] encrypted, String key, String iv) throws Exception {
+        Cipher cipher = Cipher.getInstance(ALGORITHMSTR);
         SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes(), "AES");
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        IvParameterSpec iv = new IvParameterSpec(ivs.getBytes());
-        cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
-        byte[] encrypted = decoder.decode(sSrc);
+        IvParameterSpec ivParameter = new IvParameterSpec(iv.getBytes());
+        cipher.init(Cipher.DECRYPT_MODE, skeySpec, ivParameter);
         byte[] original = cipher.doFinal(encrypted);
         return new String(original, "utf-8");
     }
 
+    public static String decrypt(String sSrc, String key, String iv) throws Exception {
+        return decryptByBytes(decoder.decode(sSrc), key, iv);
+    }
+
     public static void main(String[] args) throws Exception {
         // 需要加密的字串
-//        String cSrc = "[{\"request_no\":\"1001\",\"service_code\":\"FS0001\",\"contract_id\":\"100002\",\"order_id\":\"0\",\"phone_id\":\"13913996922\",\"plat_offer_id\":\"100094\",\"channel_id\":\"1\",\"activity_id\":\"100045\"}]";
-        String cSrc = "username";
+        String cSrc = "[{\"request_no\":\"1001\",\"service_code\":\"FS0001\",\"contract_id\":\"100002\",\"order_id\":\"0\",\"phone_id\":\"13913996922\",\"plat_offer_id\":\"100094\",\"channel_id\":\"1\",\"activity_id\":\"100045\"}]";
         /** 加密用的Key 可以由大小写字母数字组成 此处使用AES-128-CBC加密模式，key需要为16位。 */
         String sKey = "1234123412ABCDEF";//key，可自行修改，必须是16位。
         String ivParameter = "ABCDEF1234123412";//偏移量,可自行修改

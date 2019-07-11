@@ -1,8 +1,8 @@
 package com.hegp.controller.cipher;
 
 import com.hegp.core.domain.RequestResponse;
-import com.hegp.core.utiils.AESSuccessUtils;
-import com.hegp.core.utiils.AESUtils;
+import com.hegp.core.utiils.encrypt.aes.AesECBUtils;
+import com.hegp.core.utiils.encrypt.aes.AesCBCUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,24 +12,25 @@ public class AESController {
     private String sKey = "1234123412ABCDEF";//key，可自行修改，必须是16位。
     private String ivParameter = "ABCDEF1234123412";//偏移量,可自行修改
 
-    @PostMapping(value = "/application-json")
+    @PostMapping(value = "/aes-cbc-iv")
     public RequestResponse applicationJson(@RequestBody LoginParams loginParams) throws Exception {
         if (StringUtils.isEmpty(loginParams.getUsername())||StringUtils.isEmpty(loginParams.getPassword())) {
             throw new RuntimeException("username/password不允许为空");
         }
-        System.out.println(loginParams.getUsername()+"  解密后===>>>  "+ AESUtils.decrypt(loginParams.getUsername(), sKey, ivParameter));
-        System.out.println(loginParams.getPassword()+"  解密后===>>>  "+ AESUtils.decrypt(loginParams.getPassword(), sKey, ivParameter));
+        System.out.println("AES/CBC/PKCS5Padding方式  ===>>>  "+loginParams.getUsername()+"  解密后===>>>  "+ AesCBCUtils.decrypt(loginParams.getUsername(), sKey, ivParameter));
+        System.out.println("AES/CBC/PKCS5Padding方式  ===>>>  "+loginParams.getPassword()+"  解密后===>>>  "+ AesCBCUtils.decrypt(loginParams.getPassword(), sKey, ivParameter));
 
         return RequestResponse.build(loginParams);
     }
 
-    @PostMapping(value = "/application-json-success")
+    //  "AES/ECB/PKCS5Padding"
+    @PostMapping(value = "/aes-ecb-no-iv")
     public RequestResponse applicationJsonSuccess(@RequestBody LoginParams loginParams) throws Exception {
         if (StringUtils.isEmpty(loginParams.getUsername())||StringUtils.isEmpty(loginParams.getPassword())) {
             throw new RuntimeException("username/password不允许为空");
         }
-        System.out.println(loginParams.getUsername()+"  解密后===>>>  "+ AESSuccessUtils.aesDecrypt(loginParams.getUsername(), sKey));
-        System.out.println(loginParams.getPassword()+"  解密后===>>>  "+ AESSuccessUtils.aesDecrypt(loginParams.getPassword(), sKey));
+        System.out.println("AES/ECB/PKCS5Padding方式  ===>>>  "+loginParams.getUsername()+"  解密后===>>>  "+ AesECBUtils.decrypt(loginParams.getUsername(), sKey));
+        System.out.println("AES/ECB/PKCS5Padding方式  ===>>>  "+loginParams.getPassword()+"  解密后===>>>  "+ AesECBUtils.decrypt(loginParams.getPassword(), sKey));
         return RequestResponse.build(loginParams);
     }
 
