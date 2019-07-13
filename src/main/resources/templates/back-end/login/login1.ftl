@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>登录</title>
-    <link rel="stylesheet" href="${Request.dynamicProjectPath!""}/plugins/layui/v2.4.5/css/layui.css"/>
-    <link rel="stylesheet" href="${Request.dynamicProjectPath!""}/easyweb/css/login.css?v=312">
+    <link rel="stylesheet" href="${Request.basePath!""}/plugins/layui/v2.4.5/css/layui.css"/>
+    <link rel="stylesheet" href="${Request.basePath!""}/easyweb/css/login.css?v=312">
     <!--[if lt IE 9]>
-    <script src="${Request.dynamicProjectPath!""}/plugins/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="${Request.dynamicProjectPath!""}/plugins/respond/1.4.2/respond.min.js"></script>
+    <script src="${Request.basePath!""}/plugins/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="${Request.basePath!""}/plugins/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script>
         if (window != top) {
@@ -81,7 +81,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="${Request.dynamicProjectPath!""}/plugins/layui/v2.4.5/layui.all.js"></script>
+<script type="text/javascript" src="${Request.basePath!""}/plugins/layui/v2.4.5/layui.all.js"></script>
 <script>
     layui.use(['layer', 'form'], function () {
         var $ = layui.jquery;
@@ -96,7 +96,7 @@
 
         // 图形验证码
         $('.login-captcha').click(function () {
-            this.src = '${Request.dynamicProjectPath!""}/captcha?t=' + (new Date).getTime();
+            this.src = '${Request.basePath!""}/captcha?t=' + (new Date).getTime();
         });
     });
 </script>

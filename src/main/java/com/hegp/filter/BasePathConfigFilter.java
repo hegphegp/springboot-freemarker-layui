@@ -14,12 +14,12 @@ import java.io.IOException;
  * 给request配置用户浏览器访问路径，然后动态设置项目的css和js的全路径
  */
 @Component
-public class ProjectPathConfigFilter extends OncePerRequestFilter {
+public class BasePathConfigFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String uri = request.getRequestURI();
         if (!uri.startsWith("/h2-console")) {
-            String dynamicProjectPath = "";
+            String basePath = "";
             String contextPath = request.getContextPath();
             String scheme = StringUtils.hasText(request.getScheme())? request.getScheme():"http";
             // 如果用了 nginx作为请求入口，一定要配置
@@ -38,22 +38,22 @@ public class ProjectPathConfigFilter extends OncePerRequestFilter {
                     if (StringUtils.hasText(requestURI) && requestURI.equals("/") == false) {
                         int index = xForwardedUri.lastIndexOf(requestURI);
                         if (index > -1) {
-                            dynamicProjectPath = scheme+"://"+xForwardedHost+xForwardedUri.substring(0, index);
+                            basePath = scheme+"://"+xForwardedHost+xForwardedUri.substring(0, index);
                         }
                     }
                 }
             } else {
                 if (StringUtils.hasText(xForwardedHost)) {
                     String xForwardedPrefix = request.getHeader("x-forwarded-prefix");
-                    dynamicProjectPath = scheme+"://"+xForwardedHost+xForwardedPrefix;
+                    basePath = scheme+"://"+xForwardedHost+xForwardedPrefix;
                 }
             }
-            dynamicProjectPath += StringUtils.hasText(contextPath)? contextPath:"";
+            basePath += StringUtils.hasText(contextPath)? contextPath:"";
             String host = request.getHeader("Host");
-            if (StringUtils.hasText(dynamicProjectPath)) {
-                request.setAttribute("dynamicProjectPath", dynamicProjectPath);
+            if (StringUtils.hasText(basePath)) {
+                request.setAttribute("basePath", basePath);
             } else if (StringUtils.hasText(host)) {
-                request.setAttribute("dynamicProjectPath", scheme+"://"+host);
+                request.setAttribute("basePath", scheme+"://"+host);
             }
 
         }

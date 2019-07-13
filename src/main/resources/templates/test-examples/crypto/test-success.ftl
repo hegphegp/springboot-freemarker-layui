@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>只有这一种方式,能力有限,没必要浪费生命去研究,如果想浪费生命,直接去S</title>
-    <script src="${Request.dynamicProjectPath!""}/plugins/jquery/v1.12.4/jquery.min.js"></script>
-    <script src="${Request.dynamicProjectPath!""}/plugins/crypto-js/3.1.9-1/crypto-js.min.js"></script>
-    <script src="${Request.dynamicProjectPath!""}/plugins/layui/v2.4.5/layui.all.js"></script>
+    <script src="${Request.basePath!""}/plugins/jquery/v1.12.4/jquery.min.js"></script>
+    <script src="${Request.basePath!""}/plugins/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+    <script src="${Request.basePath!""}/plugins/layui/v2.4.5/layui.all.js"></script>
 </head>
 </head>
 <body>
@@ -62,7 +62,7 @@
                 headers: {
                     Accept: "application/json; charset=utf-8"
                 },
-                url:'${Request.dynamicProjectPath!""}/v1/crypto/aes-cbc-iv',
+                url:'${Request.basePath!""}/v1/crypto/aes-cbc-iv',
                 data: JSON.stringify(jsonData),
                 type:'post',
                 cache:false,
@@ -89,7 +89,7 @@
                 headers: {
                     Accept: "application/json; charset=utf-8"
                 },
-                url:'${Request.dynamicProjectPath!""}/v1/crypto/aes-ecb-no-iv',
+                url:'${Request.basePath!""}/v1/crypto/aes-ecb-no-iv',
                 data: JSON.stringify(newJsonData),
                 type:'post',
                 cache:false,

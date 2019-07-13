@@ -6,9 +6,9 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="${Request.dynamicProjectPath!""}/plugins/layui/v2.4.5/css/layui.css">
-    <link rel="stylesheet" href="${Request.dynamicProjectPath!""}/css/admin.css" media="all">
-    <link rel="stylesheet" href="${Request.dynamicProjectPath!""}/css/login.css" media="all">
+    <link rel="stylesheet" href="${Request.basePath!""}/plugins/layui/v2.4.5/css/layui.css">
+    <link rel="stylesheet" href="${Request.basePath!""}/css/admin.css" media="all">
+    <link rel="stylesheet" href="${Request.basePath!""}/css/login.css" media="all">
 </head>
 <body>
 
@@ -83,7 +83,7 @@
 
 </div>
 
-<script src="${Request.dynamicProjectPath!""}/plugins/layui/v2.4.5/layui.all.js"></script>
+<script src="${Request.basePath!""}/plugins/layui/v2.4.5/layui.all.js"></script>
 <script type="text/javascript">
     // $(function(){
     //     console.log("-0000000000000000000000000000")
@@ -105,7 +105,7 @@
         // alert("userName");
         // 图形验证码
         $('#login-captcha').click(function () {
-            this.src = '${Request.dynamicProjectPath!""}/captcha?t=' + (new Date).getTime();
+            this.src = '${Request.basePath!""}/captcha?t=' + (new Date).getTime();
         });
     })()
 

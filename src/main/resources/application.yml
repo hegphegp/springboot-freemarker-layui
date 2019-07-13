@@ -2,8 +2,7 @@ spring:
   application:
     name: test
   datasource:
-    driver-class-name: org.h2.Driver
-#    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: org.h2.Driver # com.mysql.jdbc.Driver
     username: sa
     password: sa
     url: jdbc:h2:mem:test
@@ -16,8 +15,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-    database: h2
-#    database: mysql
+    database: h2 # mysql
   h2:
     console:
       path: /h2-console

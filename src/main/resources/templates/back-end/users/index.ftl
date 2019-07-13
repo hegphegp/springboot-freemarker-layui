@@ -5,13 +5,13 @@ ${request}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>开始使用layui</title>
-    <link rel="stylesheet" href="${Request.dynamicProjectPath!""}/plugins/layui/v2.4.5/css/layui.css">
+    <link rel="stylesheet" href="${Request.basePath!""}/plugins/layui/v2.4.5/css/layui.css">
 </head>
 <body>
 
 <!-- 你的HTML代码 -->
 
-<script src="${Request.dynamicProjectPath!""}/plugins/layui/v2.4.5/layui.js"></script>
+<script src="${Request.basePath!""}/plugins/layui/v2.4.5/layui.js"></script>
 <script>
     //一般直接写在一个js文件中
     layui.use(['layer', 'form'], function(){

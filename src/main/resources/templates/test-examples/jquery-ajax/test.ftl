@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>form表单提交会调整URL，此乃大忌。用ajax提交表单数据，并阻止表单提交</title>
-    <script src="${Request.dynamicProjectPath!""}/plugins/jquery/v1.12.4/jquery.min.js"></script>
-    <script src="${Request.dynamicProjectPath!""}/plugins/layui/v2.4.5/layui.all.js"></script>
+    <script src="${Request.basePath!""}/plugins/jquery/v1.12.4/jquery.min.js"></script>
+    <script src="${Request.basePath!""}/plugins/layui/v2.4.5/layui.all.js"></script>
 </head>
 </head>
 <body>
@@ -21,7 +21,7 @@
     (function() {
         $("#submitform").on("submit", function(ev) {
             $.ajax({
-                url:'${Request.dynamicProjectPath!""}/v1/jquery-ajax/x-www-form-urlencoded',
+                url:'${Request.basePath!""}/v1/jquery-ajax/x-www-form-urlencoded',
                 // data: {username:$("#username").val(), password:$("#password").val()},
                 data: $('#submitform').serialize(),                   // data冒号后面接的是json对象
                 type:'post',
@@ -48,7 +48,7 @@
         // get请求
         $("#submitform").on("submit", function(ev) {
             $.ajax({
-                url:'${Request.dynamicProjectPath!""}/v1/jquery-ajax/get',
+                url:'${Request.basePath!""}/v1/jquery-ajax/get',
                 // data: {username:$("#username").val(), password:$("#password").val()},
                 data: $('#submitform').serialize(),                   // data冒号后面接的是json对象
                 type:'get',
