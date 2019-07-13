@@ -37,6 +37,9 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.h2database:h2:1.4.192'
+    implementation 'com.github.wenhao:jpa-spec:3.2.4'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-freemarker'
 //    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
