@@ -7,9 +7,9 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "sys_resource",
-       indexes = {@Index(name="sys_resource_name_index", columnList = "username", unique=false),
-                  @Index(name="sys_resource_del_index", columnList = "del", unique=false)})
+@Table(name = "sys_user",
+       indexes = {@Index(name="sys_user_username_index", columnList = "username", unique=false),
+                  @Index(name="sys_user_del_index", columnList = "del", unique=false)})
 public class UserEntity extends IdEntity {
     private String username;
     private String nickname;

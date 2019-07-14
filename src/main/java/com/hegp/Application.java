@@ -1,6 +1,7 @@
 package com.hegp;
 
 import com.github.wenhao.jpa.Specifications;
+import com.hegp.core.jpa.SQLRepository;
 import com.hegp.entity.UserEntity;
 import com.hegp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
+import java.util.*;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
@@ -24,6 +25,8 @@ public class Application implements CommandLineRunner {
     private UserRoleRelRepository userRoleRelRepository;
     @Autowired
     private RoleResourceRelRepository roleResourceRelRepository;
+    @Autowired
+    private SQLRepository sqlRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -37,12 +40,9 @@ public class Application implements CommandLineRunner {
         userEntity.setNickname("nickname");
         userEntity.setUsername("username");
         userRepository.save(userEntity);
-        // JPA世纪巨坑的方法,getOne(String id)不打印SQL语句,执行getOne(String id)居然不查数据库,此时任何的解释的都是苍白的,通过这个方法,决不可以相信官方
-        userRepository.getOne(userEntity.getId());
-        userRepository.findById("id");
+        // JPA世纪巨坑的方法,执行getOne(String id)方法居然不查数据库,此时任何的解释的都是苍白的,绝对不可以用这个方法
+        // userRepository.getOne(userEntity.getId());
         testUser();
-//        userRepository.f
-//        UserEntity userEntity = userRepository.findById("id").get();
     }
 
     private void testUser() {
