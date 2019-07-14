@@ -11,6 +11,7 @@ import javax.persistence.Table;
        indexes = {@Index(name="sys_group_name_index", columnList = "name", unique=false),
                   @Index(name="sys_group_level_index", columnList = "level", unique=false),
                   @Index(name="sys_group_parent_id_index", columnList = "parentId", unique=false),
+                  @Index(name="sys_group_order_index_index", columnList = "orderIndex", unique=false),
                   @Index(name="sys_group_group_type_id_index", columnList = "groupTypeId", unique=false)})
 public class GroupEntity extends TreeEntity {
     private String groupTypeId;
