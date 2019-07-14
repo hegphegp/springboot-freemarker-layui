@@ -1,6 +1,6 @@
 package com.hegp.core.jpa;
 
-import org.hibernate.query.internal.NativeQueryImpl;
+import org.hibernate.query.NativeQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -27,16 +27,15 @@ public class SQLRepository {
         Long totalCount = queryResultCount(countSQL, params);
         List<Map> data = new ArrayList<>();
         if (totalCount!=0) {
-            data = queryResultList(dataSQL, page, pagesize, params);
+            data = queryPageResultList(dataSQL, page, pagesize, params);
         }
         return new PageImpl(data, PageRequest.of(page, pagesize), totalCount);
     }
 
     /** 前端传过来的页码是从1开始的，entityManager.createNativeQuery的查询的*/
-    public List<Map> queryResultList(String sql, int page, int pagesize, Object... params) {
+    public List<Map> queryPageResultList(String sql, int page, int pagesize, Object... params) {
         Query dataQuery = entityManager.createNativeQuery(sql);
-        dataQuery = assemblyParam(dataQuery, params);
-        dataQuery.unwrap(NativeQueryImpl.class)
+        assemblyParam(dataQuery, params).unwrap(NativeQuery.class)
                 .setFirstResult((page-1)*pagesize)
                 .setMaxResults(pagesize);
         return (List<Map>) dataQuery.getResultList()
@@ -47,8 +46,7 @@ public class SQLRepository {
     /** 装配Sql,返回全部结果 */
     public List<Map> queryResultList(String sql, Object... params) {
         Query dataQuery = entityManager.createNativeQuery(sql);
-        dataQuery = assemblyParam(dataQuery, params);
-        dataQuery.unwrap(NativeQueryImpl.class);
+        assemblyParam(dataQuery, params).unwrap(NativeQuery.class);
         return (List<Map>) dataQuery.getResultList()
                 .stream().map(item -> convertKeyToCamel((Map<String, Object>) item))
                 .collect(Collectors.toList());
@@ -64,17 +62,16 @@ public class SQLRepository {
 
     /** 返回SQL查询的数据条数 */
     public Long queryResultCount(String sql, Object... params) {
-        Query countQuery = entityManager.createNativeQuery(sql, Long.class);
-        countQuery = assemblyParam(countQuery, params);
-        return (Long) countQuery.getSingleResult();
+        Query countQuery = entityManager.createNativeQuery(sql);
+        assemblyParam(countQuery, params);
+        return Long.parseLong(countQuery.getSingleResult().toString());
     }
 
     /** 执行修改语句，返回受影响行数 */
     public int queryModifyCount(String sql, Object... params){
         EntityTransaction transaction = entityManager.getTransaction();
         Query dataQuery = entityManager.createNativeQuery(sql);
-        dataQuery = assemblyParam(dataQuery,params);
-        int count = dataQuery.executeUpdate();
+        int count = assemblyParam(dataQuery, params).executeUpdate();
         transaction.commit();
         return count;
     }

@@ -43,6 +43,7 @@ public class Application implements CommandLineRunner {
         // JPA世纪巨坑的方法,执行getOne(String id)方法居然不查数据库,此时任何的解释的都是苍白的,绝对不可以用这个方法
         // userRepository.getOne(userEntity.getId());
         testUser();
+        testTest();
     }
 
     private void testUser() {
@@ -65,6 +66,7 @@ public class Application implements CommandLineRunner {
         users = userRepository.findAll(specification);
 
         specification = Specifications.<UserEntity>and()
+                .in("id", "1","2","3","4")
                 .like("username", "%a%")
                 .predicate(Specifications.or()
                         .like("phone", "%a%")
@@ -72,5 +74,14 @@ public class Application implements CommandLineRunner {
                         .build())
                 .build();
         users = userRepository.findAll(specification);
+    }
+
+    private void testTest() {
+        String sql = " SELECT su.id, su.username, su.nickname, su.phone, su.del, sr.id role_id, sr.name role_name FROM sys_user_role_rel surr " +
+                     " LEFT JOIN sys_user su ON surr.user_id = su.id " +
+                     " LEFT JOIN sys_role sr ON surr.role_id = sr.id " +
+                     " WHERE su.del=? ";
+        sqlRepository.queryPageResultList(sql,1,1, false);
+        sqlRepository.queryResultCount("SELECT COUNT(1) FROM sys_user");
     }
 }
