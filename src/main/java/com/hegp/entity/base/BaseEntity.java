@@ -15,4 +15,5 @@ public abstract class BaseEntity extends IdEntity {
     public void setName(String name) {
         this.name = name;
     }
+
 }

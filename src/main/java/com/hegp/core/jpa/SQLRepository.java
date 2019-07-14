@@ -1,6 +1,8 @@
 package com.hegp.core.jpa;
 
 import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.Transformers;
+import org.springframework.cglib.core.Transformer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +38,7 @@ public class SQLRepository {
     public List<Map> queryPageResultList(String sql, int page, int pagesize, Object... params) {
         Query dataQuery = entityManager.createNativeQuery(sql);
         assemblyParam(dataQuery, params).unwrap(NativeQuery.class)
+                .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
                 .setFirstResult((page-1)*pagesize)
                 .setMaxResults(pagesize);
         return (List<Map>) dataQuery.getResultList()
@@ -46,8 +49,8 @@ public class SQLRepository {
     /** 装配Sql,返回全部结果 */
     public List<Map> queryResultList(String sql, Object... params) {
         Query dataQuery = entityManager.createNativeQuery(sql);
-        assemblyParam(dataQuery, params).unwrap(NativeQuery.class);
-        return (List<Map>) dataQuery.getResultList()
+        assemblyParam(dataQuery, params).unwrap(NativeQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        return (List<Map>)dataQuery.getResultList()
                 .stream().map(item -> convertKeyToCamel((Map<String, Object>) item))
                 .collect(Collectors.toList());
     }

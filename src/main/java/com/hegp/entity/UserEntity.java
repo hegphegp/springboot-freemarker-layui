@@ -9,7 +9,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "sys_user",
        indexes = {@Index(name="sys_user_username_index", columnList = "username", unique=false),
-                  @Index(name="sys_user_del_index", columnList = "del", unique=false)})
+                  @Index(name="sys_user_del_index", columnList = "del", unique=false),
+                  @Index(name="sys_user_create_at_index", columnList = "createAt", unique=false),
+                  @Index(name="sys_user_update_at_index", columnList = "updateAt", unique=false)})
 public class UserEntity extends IdEntity {
     private String username;
     private String nickname;

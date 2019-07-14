@@ -1,5 +1,6 @@
 package com.hegp;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wenhao.jpa.Specifications;
 import com.hegp.core.jpa.SQLRepository;
 import com.hegp.entity.UserEntity;
@@ -76,12 +77,19 @@ public class Application implements CommandLineRunner {
         users = userRepository.findAll(specification);
     }
 
+    private ObjectMapper mapper = new ObjectMapper();
     private void testTest() {
         String sql = " SELECT su.id, su.username, su.nickname, su.phone, su.del, sr.id role_id, sr.name role_name FROM sys_user_role_rel surr " +
                      " LEFT JOIN sys_user su ON surr.user_id = su.id " +
                      " LEFT JOIN sys_role sr ON surr.role_id = sr.id " +
                      " WHERE su.del=? ";
         sqlRepository.queryPageResultList(sql,1,1, false);
+        try {
+            System.out.println(mapper.writeValueAsString(sqlRepository.queryResultList("SELECT id, username FROM sys_user")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         sqlRepository.queryResultCount("SELECT COUNT(1) FROM sys_user");
     }
 }
