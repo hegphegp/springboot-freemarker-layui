@@ -10,8 +10,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.*;
 
 @SpringBootApplication
@@ -28,6 +31,8 @@ public class Application implements CommandLineRunner {
     private RoleResourceRelRepository roleResourceRelRepository;
     @Autowired
     private SQLRepository sqlRepository;
+    @PersistenceContext
+    private EntityManager em;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -48,12 +53,17 @@ public class Application implements CommandLineRunner {
     }
 
     private void testUser() {
+        SimpleJpaRepository simpleJpaRepository = new SimpleJpaRepository(UserEntity.class, em);
+
+
         Specification<UserEntity> specification = Specifications.<UserEntity>and()
                 .like("username", "%a%")
                 .like("phone", "%%a")
                 .like("nickname", "%a%")
                 .build();
         List<UserEntity> users = userRepository.findAll(specification);
+
+        simpleJpaRepository.findAll(specification);
 
         String usernameCondition = "";
         String condition = "";
@@ -93,3 +103,4 @@ public class Application implements CommandLineRunner {
         sqlRepository.queryResultCount("SELECT COUNT(1) FROM sys_user");
     }
 }
+

@@ -2,7 +2,6 @@ package com.hegp.core.jpa;
 
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
-import org.springframework.cglib.core.Transformer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;

@@ -4,4 +4,6 @@ import com.hegp.service.TestService;
 
 
 public class TestServiceImpl implements TestService {
+
+//    HibernateGenericDao aa;
 }
