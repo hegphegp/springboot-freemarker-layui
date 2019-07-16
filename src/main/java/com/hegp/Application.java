@@ -2,6 +2,7 @@ package com.hegp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wenhao.jpa.Specifications;
+import com.hegp.core.config.InitJpaRepositoryConfig;
 import com.hegp.core.jpa.SQLRepository;
 import com.hegp.entity.UserEntity;
 import com.hegp.repository.*;
@@ -46,6 +47,7 @@ public class Application implements CommandLineRunner {
         userEntity.setNickname("nickname");
         userEntity.setUsername("username");
         userRepository.save(userEntity);
+        userRepository.getClass();
         // JPA世纪巨坑的方法,执行getOne(String id)方法居然不查数据库,此时任何的解释的都是苍白的,绝对不可以用这个方法
         // userRepository.getOne(userEntity.getId());
         testUser();
@@ -53,9 +55,8 @@ public class Application implements CommandLineRunner {
     }
 
     private void testUser() {
+        Map map = InitJpaRepositoryConfig.simpleJpaRepositoryMap;
         SimpleJpaRepository simpleJpaRepository = new SimpleJpaRepository(UserEntity.class, em);
-
-
         Specification<UserEntity> specification = Specifications.<UserEntity>and()
                 .like("username", "%a%")
                 .like("phone", "%%a")
