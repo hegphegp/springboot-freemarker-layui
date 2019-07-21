@@ -141,7 +141,7 @@ public class SQLRepository {
     }
 
     /**
-     * 数据库查出来的字段，下划线转驼峰
+     * 数据库查出来的字段，下划线转驼峰, 最后一个下划线会被去掉
      * @param defaultName
      * @return
      */
@@ -150,7 +150,9 @@ public class SQLRepository {
         StringBuilder nameToReturn = new StringBuilder();
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] == '_') {
-                nameToReturn.append(Character.toUpperCase(arr[++i]));
+                if (i<(arr.length-1)) {
+                    nameToReturn.append(Character.toUpperCase(arr[++i]));
+                }
             } else {
                 nameToReturn.append(arr[i]);
             }

@@ -101,7 +101,7 @@ public class Application implements CommandLineRunner {
             e.printStackTrace();
         }
 
-        sqlRepository.queryResultCount("SELECT COUNT(1) FROM sys_user");
+        sqlRepository.queryResultCount("SELECT COUNT(id) FROM sys_user");
     }
 }
 
