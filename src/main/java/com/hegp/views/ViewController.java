@@ -46,13 +46,11 @@ public class ViewController {
 //        System.out.println("x-forwarded-port  ===>>>  "+request.getHeader("x-forwarded-port"));
 //        System.out.println("x-forwarded-for  ===>>>  "+request.getHeader("x-forwarded-for"));
         System.out.println(request.getScheme());
-//        System.out.println("\n\n\n\n\n");
         Enumeration<String> headers = request.getHeaderNames();
         while (headers.hasMoreElements()) {
             String headerName = headers.nextElement();
             System.out.println(headerName+"  ===>>>  "+request.getHeader(headerName));
         }
-//        System.out.println("\n\n\n\n\n");
 
         String ip = request.getHeader("X-Forwarded-For");
         if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
