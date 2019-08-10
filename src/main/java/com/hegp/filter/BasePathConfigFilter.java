@@ -17,9 +17,12 @@ import java.io.IOException;
 public class BasePathConfigFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String basePath = "";
         String contextPath = request.getContextPath();
+        String host = request.getHeader("Host");
+        String xForwardedPrefix = request.getHeader("x-forwarded-prefix");
         String scheme = StringUtils.hasText(request.getScheme())? request.getScheme():"http";
+        String basePath = scheme+"://"+host+"/"+xForwardedPrefix+"/"+contextPath;
+        request.setAttribute("basePath", basePath);
         // 如果用了 nginx作为请求入口，一定要配置
         /**
          *         proxy_set_header X-Real-IP $remote_addr;
@@ -28,24 +31,26 @@ public class BasePathConfigFilter extends OncePerRequestFilter {
          *         proxy_set_header Host $http_host;
          *         proxy_set_header X-Forwarded-Uri $uri;
          */
-        String xForwardedUri = request.getHeader("x-forwarded-uri");
-        String xForwardedHost = request.getHeader("x-forwarded-host");
-        String requestURI = request.getRequestURI();
-        if (StringUtils.hasText(xForwardedUri)) {
-            if (StringUtils.hasText(xForwardedHost) && StringUtils.hasText(requestURI) && requestURI.equals("/") == false) {
-                int index = xForwardedUri.lastIndexOf(requestURI);
-                basePath = index>-1 ? scheme+"://"+xForwardedHost+xForwardedUri.substring(0, index) : basePath;
-            }
-        } else {
-            basePath = StringUtils.hasText(xForwardedHost) ? scheme+"://"+xForwardedHost+request.getHeader("x-forwarded-prefix") : basePath;
-        }
-        basePath += StringUtils.hasText(contextPath)? contextPath:"";
-        String host = request.getHeader("Host");
-        if (StringUtils.hasText(basePath)) {
-            request.setAttribute("basePath", basePath);
-        } else if (StringUtils.hasText(host)) {
-            request.setAttribute("basePath", scheme+"://"+host);
-        }
+//        String xForwardedUri = request.getHeader("x-forwarded-uri");
+//        String xForwardedHost = request.getHeader("x-forwarded-host");
+
+
+
+//        String requestURI = request.getRequestURI();
+//        if (StringUtils.hasText(xForwardedUri)) {
+//            if (StringUtils.hasText(host) && StringUtils.hasText(requestURI) && requestURI.equals("/") == false) {
+//                int index = xForwardedUri.lastIndexOf(requestURI);
+//                basePath = index>-1 ? scheme+"://"+host+xForwardedUri.substring(0, index) : basePath;
+//            }
+//        } else {
+//            basePath = StringUtils.hasText(host) ? scheme+"://"+host+request.getHeader("x-forwarded-prefix") : basePath;
+//        }
+//        basePath += StringUtils.hasText(contextPath)? contextPath:"";
+//        if (StringUtils.hasText(basePath)) {
+//            request.setAttribute("basePath", basePath);
+//        } else if (StringUtils.hasText(host)) {
+//            request.setAttribute("basePath", scheme+"://"+host);
+//        }
 
         filterChain.doFilter(request, response);
     }
