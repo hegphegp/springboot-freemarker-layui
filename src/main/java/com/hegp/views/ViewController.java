@@ -3,6 +3,7 @@ package com.hegp.views;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,6 +13,7 @@ import java.util.Enumeration;
 
 /** 每个页面的URL单独配置一个@GetMapping接口，显得很傻逼，用通配符的方式映射 */
 @Controller
+//@RequestMapping("/pages")
 public class ViewController {
 
     /**
@@ -28,8 +30,8 @@ public class ViewController {
         } else if (requestURI.endsWith(".htm")) {
             requestURI = requestURI.substring(0, requestURI.length()-4);
         }
-        ModelAndView view = new ModelAndView(requestURI);
-        return view;
+        requestURI = requestURI.substring(6);
+        return new ModelAndView(requestURI);
     }
 
     // 经过转发后，获取不到请求路径

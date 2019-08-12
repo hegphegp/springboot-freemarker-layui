@@ -21,6 +21,7 @@ public class InitJpaRepositoryConfig implements ApplicationContextAware {
 		initJpaRepository(applicationContext);
 	}
 
+	// 给每个数据库实体类手动创建SimpleJpaRepository对象，然后直接注入到通过service层
 	public void initJpaRepository(ApplicationContext applicationContext) {
 		Map<String, EntityManager> map = applicationContext.getBeansOfType(EntityManager.class);
 		for (String key:map.keySet()) {

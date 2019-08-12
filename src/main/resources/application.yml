@@ -1,6 +1,6 @@
 spring:
   application:
-    name: test
+    name: hgp-test
   datasource:
     driver-class-name: org.h2.Driver # com.mysql.jdbc.Driver
     username: sa
@@ -38,11 +38,13 @@ spring.freemarker.request-context-attribute: request
 spring.freemarker.settings.template_update_delay: 0
 spring.freemarker.suffix: .ftl
 
+spring.mvc.view.prefix: /pages/
+spring.mvc.view.suffix: .ftl
 
-server.compression.enabled: true
-server.compression.mime-types: application/json,application/xml,text/html,text/xml,text/plain
+#server.compression.enabled: true
+#server.compression.mime-types: application/json,application/xml,text/html,text/xml,text/plain
 # 默认就是2048 byte
-server.compression.min-response-size: 2048
+#server.compression.min-response-size: 2048
 
 #logging.level.root: WARN
 #logging.level.org.springframework.web: DEBUG
@@ -59,6 +61,6 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://192.168.4.151:8761/eureka
 
 

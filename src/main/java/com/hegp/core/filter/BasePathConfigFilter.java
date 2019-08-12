@@ -1,4 +1,4 @@
-package com.hegp.filter;
+package com.hegp.core.filter;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
