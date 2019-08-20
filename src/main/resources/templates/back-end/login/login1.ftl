@@ -49,7 +49,7 @@
                                        autocomplete="off" lay-verType="tips" lay-verify="required" required/>
                             </div>
                             <div class="layui-col-xs5" style="padding-left: 6px;">
-                                <img class="login-captcha" src="${Request.dynamicProjectPath!""}/captcha">
+                                <img class="login-captcha" src="${Request.basePath!""}/captcha">
                             </div>
                         </div>
                     </div>

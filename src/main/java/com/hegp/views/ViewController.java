@@ -1,5 +1,7 @@
 package com.hegp.views;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import java.util.Enumeration;
 @Controller
 @RequestMapping("/pages")
 public class ViewController {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 一个星号通配符只能匹配一层URL，两个星号通配符可以匹配多层URL
@@ -24,13 +27,14 @@ public class ViewController {
     @GetMapping(value={"/back-end/**","/front-end/**","/test-examples/**"})
     public ModelAndView page(HttpServletRequest request) {
 //        getCurrentIpAddress();
-        String requestURI = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        String requestURI = StringUtils.hasText(contextPath)? request.getRequestURI().substring(contextPath.length()):request.getRequestURI();
         if (requestURI.endsWith(".html")) {
             requestURI = requestURI.substring(0, requestURI.length()-5);
         } else if (requestURI.endsWith(".htm")) {
             requestURI = requestURI.substring(0, requestURI.length()-4);
         }
-        requestURI = requestURI.substring(6);
+        requestURI = requestURI.substring("/pages".length());
         return new ModelAndView(requestURI);
     }
 
@@ -51,7 +55,7 @@ public class ViewController {
         Enumeration<String> headers = request.getHeaderNames();
         while (headers.hasMoreElements()) {
             String headerName = headers.nextElement();
-            System.out.println(headerName+"  ===>>>  "+request.getHeader(headerName));
+            logger.debug(headerName+"  ===>>>  "+request.getHeader(headerName));
         }
 
         String ip = request.getHeader("X-Forwarded-For");

@@ -36,7 +36,7 @@
                     </div>
                     <div class="layui-col-xs5">
                         <div style="margin-left: 10px;">
-                            <img src="${Request.dynamicProjectPath!""}/captcha" class="layadmin-user-login-codeimg" id="login-captcha">
+                            <img src="${Request.basePath!""}/captcha" class="layadmin-user-login-codeimg" id="login-captcha">
                         </div>
                     </div>
                 </div>
