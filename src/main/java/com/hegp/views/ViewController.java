@@ -13,7 +13,7 @@ import java.util.Enumeration;
 
 /** 每个页面的URL单独配置一个@GetMapping接口，显得很傻逼，用通配符的方式映射 */
 @Controller
-//@RequestMapping("/pages")
+@RequestMapping("/pages")
 public class ViewController {
 
     /**

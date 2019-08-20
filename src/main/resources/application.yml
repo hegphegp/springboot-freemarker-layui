@@ -38,7 +38,7 @@ spring.freemarker.request-context-attribute: request
 spring.freemarker.settings.template_update_delay: 0
 spring.freemarker.suffix: .ftl
 
-spring.mvc.view.prefix: /pages/
+#spring.mvc.view.prefix: /pages/
 spring.mvc.view.suffix: .ftl
 
 #server.compression.enabled: true
@@ -61,6 +61,6 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://192.168.4.151:8761/eureka
+      defaultZone: http://192.168.0.100:8761/eureka
 
 

@@ -70,7 +70,7 @@ public class SQLRepository {
     }
 
     /** 执行修改语句，返回受影响行数 */
-    public int queryModifyCount(String sql, Object... params){
+    public Integer queryModifyCount(String sql, Object... params){
         EntityTransaction transaction = entityManager.getTransaction();
         Query dataQuery = entityManager.createNativeQuery(sql);
         int count = assemblyParam(dataQuery, params).executeUpdate();
@@ -83,11 +83,8 @@ public class SQLRepository {
         int index = 1;
         for (Object param : params) {
             if (param!=null && param instanceof Collection) {
-                Collection collection = (Collection)param;
-                if (collection.size()>0 && collection.iterator().next() instanceof Number) {
-                    query.setParameter(index, assemblyNumberArrInSQL(collection));
-                } else if (collection.size()>0 && collection.iterator().next() instanceof String) {
-                    query.setParameter(index, assemblyStrArrInSQL(collection));
+                if (((Collection) param).size()>0) {
+                    query.setParameter(index, param);
                 }
             } else if (!StringUtils.isEmpty(param)) {
                 query.setParameter(index, param);
@@ -95,35 +92,6 @@ public class SQLRepository {
             index++;
         }
         return query;
-    }
-
-    /**
-     * 封装SQL语句中in查询的参数格式
-     * 集合参数为空，返回空字符串
-     * 集合参数非空，如果参数是[id1,id2,id3,id4]，返回的结果是 ('id1','id2','id3','id4')
-     */
-    public static String assemblyStrArrInSQL(Collection<String> collection) {
-        if (collection==null || collection.size()==0) {
-            return "";
-        }
-        return "'"+String.join("','", collection)+"'";
-    }
-
-    /**
-     * 封装SQL语句中in查询的参数格式
-     * 集合参数为空，返回空字符串
-     * 集合参数非空，如果参数是[id1,id2,id3,id4]，返回的结果是 ('id1','id2','id3','id4')
-     */
-    public static String assemblyNumberArrInSQL(Collection<Number> collection) {
-        if (collection==null || collection.size()==0) {
-            return "";
-        }
-        Iterator<Number> iterator = collection.iterator();
-        StringBuffer sb = new StringBuffer(iterator.next()+"");
-        while (iterator.hasNext()) {
-            sb.append(","+iterator.next());
-        }
-        return sb.toString();
     }
 
     /**
@@ -141,7 +109,7 @@ public class SQLRepository {
     }
 
     /**
-     * 数据库查出来的字段，下划线转驼峰, 最后一个下划线会被去掉
+     * 数据库查出来的字段，下划线转驼峰
      * @param defaultName
      * @return
      */
@@ -150,9 +118,7 @@ public class SQLRepository {
         StringBuilder nameToReturn = new StringBuilder();
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] == '_') {
-                if (i<(arr.length-1)) {
-                    nameToReturn.append(Character.toUpperCase(arr[++i]));
-                }
+                nameToReturn.append(Character.toUpperCase(arr[++i]));
             } else {
                 nameToReturn.append(arr[i]);
             }
