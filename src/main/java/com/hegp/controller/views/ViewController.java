@@ -1,4 +1,4 @@
-package com.hegp.views;
+package com.hegp.controller.views;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,8 @@ public class ViewController {
      * @param request
      * @return
      */
-    @GetMapping(value={"/back-end/**","/front-end/**","/test-examples/**"})
+//    @GetMapping(value={"/back-end/**","/front-end/**","/test-examples/**"})
+    @GetMapping(value={"/**"})
     public ModelAndView page(HttpServletRequest request) {
 //        getCurrentIpAddress();
         String contextPath = request.getContextPath();
