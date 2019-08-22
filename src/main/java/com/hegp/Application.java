@@ -23,6 +23,8 @@ import java.util.*;
 //@EnableEurekaClient
 @SpringBootApplication
 public class Application implements CommandLineRunner {
+//    @Autowired
+//    private SimpleJpaRepository simpleJpaRepository;
     @Autowired
     private UserService userService;
     @Autowired
@@ -50,7 +52,8 @@ public class Application implements CommandLineRunner {
         userEntity.setPhone("phone");
         userEntity.setNickname("nickname");
         userEntity.setUsername("username");
-        InitJpaRepositoryConfig.simpleJpaRepositoryMap.get(UserEntity.class).save(userEntity);
+        userService.save(userEntity);
+//        InitJpaRepositoryConfig.simpleJpaRepositoryMap.get(UserEntity.class).save(userEntity);
         // JPA世纪巨坑的方法,执行getOne(String id)方法居然不查数据库,此时任何的解释的都是苍白的,绝对不可以用这个方法
         // userRepository.getOne(userEntity.getId());
 //        testUser();

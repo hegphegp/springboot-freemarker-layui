@@ -8,6 +8,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.ResolvableType;
+import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
 import javax.persistence.EntityManager;
@@ -19,6 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+//@Transactional
 public class JPAServiceImpl<T, ID> implements JPAService<T, ID>, InitializingBean, ApplicationContextAware {
     public EntityManager entityManager;
     public SimpleJpaRepository<T, ID> simpleJpaRepository;
@@ -78,6 +80,7 @@ public class JPAServiceImpl<T, ID> implements JPAService<T, ID>, InitializingBea
 
     @Override
     public T save(T entity) {
+        simpleJpaRepository.save(entity);
         return null;
     }
 
@@ -163,19 +166,22 @@ public class JPAServiceImpl<T, ID> implements JPAService<T, ID>, InitializingBea
         for (Map.Entry<String, EntityManager> entry : map.entrySet()) {
             Set<EntityType<?>> set = entry.getValue().getMetamodel().getEntities();
             for (EntityType entityType:set) {
-                if (entityType.getJavaType()==claz && InitJpaRepositoryConfig.simpleJpaRepositoryMap.get(claz) == null) {
-                    synchronized (InitJpaRepositoryConfig.class) {
-                        if (InitJpaRepositoryConfig.simpleJpaRepositoryMap.get(claz) == null) {
-                            entityManager = entry.getValue();
-                            simpleJpaRepository = new SimpleJpaRepository(claz, entityManager);
-                            InitJpaRepositoryConfig.simpleJpaRepositoryMap.put(claz, simpleJpaRepository);
-                            return;
+                if (entityType.getJavaType()==claz) {
+                    if (InitJpaRepositoryConfig.simpleJpaRepositoryMap.get(claz) == null) {
+                        synchronized (InitJpaRepositoryConfig.class) {
+                            if (InitJpaRepositoryConfig.simpleJpaRepositoryMap.get(claz) == null) {
+                                entityManager = entry.getValue();
+                                simpleJpaRepository = new SimpleJpaRepository(claz, entityManager);
+                                InitJpaRepositoryConfig.simpleJpaRepositoryMap.put(claz, simpleJpaRepository);
+                            }
                         }
+                    } else {
+                        entityManager = entry.getValue();
+                        simpleJpaRepository = InitJpaRepositoryConfig.simpleJpaRepositoryMap.get(claz);
                     }
-                } else {
-                    entityManager = entry.getValue();
-                    simpleJpaRepository = new SimpleJpaRepository(claz, entityManager);
-                    InitJpaRepositoryConfig.simpleJpaRepositoryMap.get(claz);
+//                    new JpaRepositoryFactory(entityManager).re
+                    new JpaRepositoryFactory(entityManager);
+                    new JpaRepositoryFactory(entityManager).getEntityInformation(claz);
                     return;
                 }
             }
