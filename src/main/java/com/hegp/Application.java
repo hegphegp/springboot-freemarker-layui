@@ -5,33 +5,34 @@ import com.github.wenhao.jpa.Specifications;
 import com.hegp.core.config.InitJpaRepositoryConfig;
 import com.hegp.core.jpa.SQLRepository;
 import com.hegp.entity.UserEntity;
-import com.hegp.repository.*;
+import com.hegp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+//import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.*;
 
-@EnableEurekaClient
+//@EnableEurekaClient
 @SpringBootApplication
 public class Application implements CommandLineRunner {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
     @Autowired
-    private RoleRepository roleRepository;
+    private RoleService roleService;
     @Autowired
-    private ResourceRepository resourceRepository;
+    private ResourceService resourceService;
     @Autowired
-    private UserRoleRelRepository userRoleRelRepository;
+    private UserRoleRelService userRoleRelService;
     @Autowired
-    private RoleResourceRelRepository roleResourceRelRepository;
+    private RoleResourceRelService roleResourceRelService;
     @Autowired
     private SQLRepository sqlRepository;
     @PersistenceContext
@@ -42,29 +43,38 @@ public class Application implements CommandLineRunner {
     }
 
     @Override
+//    @Transactional
     public void run(String... args) throws Exception {
         UserEntity userEntity = new UserEntity();
         userEntity.setDel(false);
         userEntity.setPhone("phone");
         userEntity.setNickname("nickname");
         userEntity.setUsername("username");
-        userRepository.save(userEntity);
-        userRepository.getClass();
+        InitJpaRepositoryConfig.simpleJpaRepositoryMap.get(UserEntity.class).save(userEntity);
         // JPA世纪巨坑的方法,执行getOne(String id)方法居然不查数据库,此时任何的解释的都是苍白的,绝对不可以用这个方法
         // userRepository.getOne(userEntity.getId());
-        testUser();
-        testTest();
+//        testUser();
+//        testTest();
     }
 
     private void testUser() {
-        Map map = InitJpaRepositoryConfig.simpleJpaRepositoryMap;
         SimpleJpaRepository simpleJpaRepository = new SimpleJpaRepository(UserEntity.class, em);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setDel(false);
+        userEntity.setPhone("phone");
+        userEntity.setNickname("nickname");
+        userEntity.setUsername("username");
+//        simpleJpaRepository.save(userEntity);
+
+        userService.getSimpleJpaRepository().findById("00");
+        Map map = InitJpaRepositoryConfig.simpleJpaRepositoryMap;
+
         Specification<UserEntity> specification = Specifications.<UserEntity>and()
                 .like("username", "%a%")
                 .like("phone", "%%a")
                 .like("nickname", "%a%")
                 .build();
-        List<UserEntity> users = userRepository.findAll(specification);
+        List<UserEntity> users = userService.getSimpleJpaRepository().findAll(specification);
 
         simpleJpaRepository.findAll(specification);
 
@@ -77,7 +87,7 @@ public class Application implements CommandLineRunner {
                         .like("nickname", "%"+condition+"%")
                         .build())
                 .build();
-        users = userRepository.findAll(specification);
+        users = userService.getSimpleJpaRepository().findAll(specification);
 
         specification = Specifications.<UserEntity>and()
                 .in("id", "1","2","3","4")
@@ -87,7 +97,7 @@ public class Application implements CommandLineRunner {
                         .like("nickname", "%a%")
                         .build())
                 .build();
-        users = userRepository.findAll(specification);
+        users = userService.getSimpleJpaRepository().findAll(specification);
     }
 
     private ObjectMapper mapper = new ObjectMapper();

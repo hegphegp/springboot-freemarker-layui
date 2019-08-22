@@ -27,7 +27,11 @@ public class InitJpaRepositoryConfig implements ApplicationContextAware {
 		for (String key:map.keySet()) {
 			Set<EntityType<?>> set = map.get(key).getMetamodel().getEntities();
 			for (EntityType entityType:set) {
-				simpleJpaRepositoryMap.put(entityType.getJavaType(), new SimpleJpaRepository(entityType.getJavaType(), map.get(key)));
+				synchronized (InitJpaRepositoryConfig.class) {
+					if (simpleJpaRepositoryMap.get(entityType.getJavaType())==null) {
+						simpleJpaRepositoryMap.put(entityType.getJavaType(), new SimpleJpaRepository(entityType.getJavaType(), map.get(key)));
+					}
+				}
 			}
 		}
 	}
