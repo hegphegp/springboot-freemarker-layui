@@ -2,8 +2,8 @@ package com.hegp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wenhao.jpa.Specifications;
-import com.hegp.core.config.InitJpaRepositoryConfig;
 import com.hegp.core.jpa.SQLRepository;
+import com.hegp.core.jpa.service.JPAService;
 import com.hegp.entity.UserEntity;
 import com.hegp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +70,7 @@ public class Application implements CommandLineRunner {
 //        simpleJpaRepository.save(userEntity);
 
         userService.getSimpleJpaRepository().findById("00");
-        Map map = InitJpaRepositoryConfig.simpleJpaRepositoryMap;
+        Map map = JPAService.simpleJpaRepositoryMap;
 
         Specification<UserEntity> specification = Specifications.<UserEntity>and()
                 .like("username", "%a%")

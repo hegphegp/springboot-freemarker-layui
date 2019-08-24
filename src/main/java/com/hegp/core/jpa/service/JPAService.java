@@ -1,11 +1,17 @@
 package com.hegp.core.jpa.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 
 public interface JPAService<T, ID> {
+    Map<Class, EntityManager> entityManagerMap = new HashMap<>();
+    Map<Class, SimpleJpaRepository> simpleJpaRepositoryMap = new HashMap<>();
 
     T find(ID id);
 
@@ -14,12 +20,6 @@ public interface JPAService<T, ID> {
     List<T> save(T[] entities);
 
     List<T> save(List<T> entities);
-
-    T update(T entity);
-
-    List<T> update(T[] entities);
-
-    List<T> update(List<T> entities);
 
     void delete(T entity);
 
@@ -33,11 +33,13 @@ public interface JPAService<T, ID> {
 
     void deleteById(List<ID> ids);
 
-    Query<T> query();
+    Page<T> page(Pageable pageable);
+
+    EntityManager getEntityManager();
+
+    EntityManager getEntityManager(Class clazz);
 
     SimpleJpaRepository<T, ID> getSimpleJpaRepository();
 
     SimpleJpaRepository<T, ID> getSimpleJpaRepository(Class clazz);
-
-    EntityManager getEntityManager();
 }
