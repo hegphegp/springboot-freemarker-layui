@@ -15,7 +15,6 @@ public class JqueryAjaxController {
         Map map = new HashMap();
         map.put("username", params.get("username"));
         map.put("password", params.get("password"));
-                response.setStatus(500)
         System.out.println(map);
         return RequestResponse.build(map);
     }
