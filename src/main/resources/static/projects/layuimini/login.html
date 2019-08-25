@@ -83,26 +83,35 @@
 
 </div>
 
-<script src="lib/layui/v2.5.4/layui.all.js?v=1.0.4"></script>
+<script src="lib/layui/v2.5.4/layui.js?v=1.0.4"></script>
 <script type="text/javascript">
-    (function() {
-        var $ = layui.$; //重点处
-        var layer = layui.layer;
+    layui.use(['layer', 'form'], function () {
+        var $ = layui.$, //重点处
+            form = layui.form;
 
-        //实际使用时记得删除该代码
-        layer.msg('为了方便演示，用户名密码可随意输入', {
-            offset: '15px'
-            ,icon: 1
-        });
-
-        layer.msg('Hello World');
-        layer.msg('jQuery版本：' + $.fn.jquery);
-        // alert("userName");
         // 图形验证码
         $('#login-captcha').click(function () {
             this.src = '../../captcha?t=' + (new Date).getTime();
         });
-    })()
+
+        form.render();
+
+        //提交
+        form.on('submit(LAY-user-login-submit)', function(obj) {
+            // 发送异步请求
+            $.ajax({
+                url : '../../v1/jquery-ajax/request-body',
+                type : 'POST',
+                data : JSON.stringify(obj.field),
+                contentType: "application/json; charset=UTF-8", // 设置请求参数以什么方式传输，如application/json，application/x-www-form-urlencoded，application/form-data
+                dataType : 'application/json',
+                success : function(data) {
+                    console.log(data);
+                }
+            })
+
+        });
+    });
 </script>
 </body>
 </html>
