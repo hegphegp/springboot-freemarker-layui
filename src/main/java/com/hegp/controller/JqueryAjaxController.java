@@ -3,6 +3,7 @@ package com.hegp.controller;
 import com.hegp.core.domain.RequestResponse;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,10 +11,11 @@ import java.util.Map;
 @RequestMapping("/v1/jquery-ajax")
 public class JqueryAjaxController {
     @PostMapping(value = "/request-body")
-    public RequestResponse testRequestBody(@RequestBody Map params) {
+    public RequestResponse testRequestBody(@RequestBody Map params, HttpServletResponse response) {
         Map map = new HashMap();
         map.put("username", params.get("username"));
         map.put("password", params.get("password"));
+                response.setStatus(500)
         System.out.println(map);
         return RequestResponse.build(map);
     }

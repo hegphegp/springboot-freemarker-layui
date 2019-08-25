@@ -86,7 +86,8 @@
 <script src="lib/layui/v2.5.4/layui.js?v=1.0.4"></script>
 <script type="text/javascript">
     layui.use(['layer', 'form'], function () {
-        var $ = layui.$, //重点处
+        var $ = layui.$,
+            layer = layui.layer,
             form = layui.form;
 
         // 图形验证码
@@ -98,18 +99,36 @@
 
         //提交
         form.on('submit(LAY-user-login-submit)', function(obj) {
+            // 每次在控制台打印数据时,先换行,看起来数据整齐一点
+            console.log("\n\n\n\n\n\n\n\n");
             // 发送异步请求
             $.ajax({
                 url : '../../v1/jquery-ajax/request-body',
                 type : 'POST',
-                data : JSON.stringify(obj.field),
+                data : JSON.stringify(obj.field),               // 表示转成json字符串, data: obj.field 参数都拼接到URL上面了
                 contentType: "application/json; charset=UTF-8", // 设置请求参数以什么方式传输，如application/json，application/x-www-form-urlencoded，application/form-data
-                dataType : 'application/json',
-                success : function(data) {
-                    console.log(data);
+                dataType : 'json',   // 只能填json,text, 填了application/json或者类型不对的话的话, 就会进入error: function (XMLHttpRequest, textStatus, errorThrown)
+                success : function(data, status, XMLHttpRequest) {  // dataType设置了json,返回的是json对象,可以通过点属性获取值
+                    console.log("success : function(data, status, XMLHttpRequest)的status取值是====>>>> "+status);	                             // 输出的是 success 字符串
+                    console.log("success : function(data, status, XMLHttpRequest)的XMLHttpRequest.status取值是====>>>> "+XMLHttpRequest.status);  // http请求响应的状态码
+                    console.log("success : function(data, status, XMLHttpRequest)的XMLHttpRequest取值换行输出====>>>> ");
+                    console.log(XMLHttpRequest);
+                    console.log(XMLHttpRequest.getAllResponseHeaders());                                                                        // 响应头部
+                    console.log(JSON.stringify(data));
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {  // http请求响应的状态码 为500的会进入error方法
+                    // http请求响应的状态码
+                    console.log("error: function (XMLHttpRequest, textStatus, errorThrown)的XMLHttpRequest.status取值是====>>>> "+XMLHttpRequest.status);
+                    // http响应的数据
+                    console.log("error: function (XMLHttpRequest, textStatus, errorThrown)的XMLHttpRequest.responseText取值是====>>>> "+XMLHttpRequest.responseText);
+                    console.log(JSON.parse(XMLHttpRequest.responseText));
+                    console.log("error: function (XMLHttpRequest, textStatus, errorThrown)的XMLHttpRequest取值换行输出====>>>> ");
+                    console.log(XMLHttpRequest);
+                },
+                complete: function(XMLHttpRequest, textStatus) {
+                    this; // 调用本次AJAX请求时传递的options参数
                 }
-            })
-
+            });
         });
     });
 </script>
