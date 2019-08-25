@@ -81,7 +81,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="${Request.basePath!""}/plugins/layui/v2.4.5/layui.all.js"></script>
+<script type="text/javascript" src="${Request.basePath!""}/plugins/layui/v2.4.5/layui.js"></script>
 <script>
     layui.use(['layer', 'form'], function () {
         var $ = layui.jquery;

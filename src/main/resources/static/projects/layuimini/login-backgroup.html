@@ -99,13 +99,13 @@
 
 </div>
 
-<script src="lib/layui/v2.5.4/layui.all.js?v=1.0.4"></script>
+<script src="lib/layui/v2.5.4/layui.js?v=1.0.4"></script>
 <script src="lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
 <script src="lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
 <script type="text/javascript">
-    (function() {
-        // var $ = layui.$; //重点处
-        var layer = layui.layer;
+    layui.use(['layer', 'form'], function () {
+        var form = layui.form,
+            layer = layui.layer;
 
         // 粒子线条背景
         $(document).ready(function(){
@@ -128,7 +128,28 @@
         $('#login-captcha').click(function () {
             this.src = '../../captcha?t=' + (new Date).getTime();
         });
-    })()
+
+        // 进行登录操作
+        form.on('submit(login)', function (data) {
+            data = data.field;
+            if (data.username == '') {
+                layer.msg('用户名不能为空');
+                return false;
+            }
+            if (data.password == '') {
+                layer.msg('密码不能为空');
+                return false;
+            }
+            if (data.captcha == '') {
+                layer.msg('验证码不能为空');
+                return false;
+            }
+            layer.msg('登录成功', function () {
+                window.location = '/index.html';
+            });
+            return false;
+        });
+    })
 </script>
 </body>
 </html>

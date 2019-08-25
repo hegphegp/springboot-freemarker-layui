@@ -83,7 +83,7 @@
 
 </div>
 
-<script src="${Request.basePath!""}/plugins/layui/v2.4.5/layui.all.js"></script>
+<script type="text/javascript" src="${Request.basePath!""}/plugins/layui/v2.4.5/layui.js"></script>
 <script type="text/javascript">
     // $(function(){
     //     console.log("-0000000000000000000000000000")
@@ -97,7 +97,7 @@
     //     alert(userName);
     // });
 
-    (function() {
+    layui.use(['form'], function () {
         var $ = layui.$; //重点处
         var layer = layui.layer;
         layer.msg('Hello World');
@@ -107,7 +107,7 @@
         $('#login-captcha').click(function () {
             this.src = '${Request.basePath!""}/captcha?t=' + (new Date).getTime();
         });
-    })()
+    })
 
     // (function() {
     //     var $ = layui.$ //重点处
