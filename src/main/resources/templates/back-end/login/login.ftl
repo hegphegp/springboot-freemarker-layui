@@ -98,7 +98,7 @@
     // });
 
     (function() {
-        var $ = layui.$ //重点处
+        var $ = layui.$; //重点处
         var layer = layui.layer;
         layer.msg('Hello World');
         layer.msg('jQuery版本：' + $.fn.jquery);
