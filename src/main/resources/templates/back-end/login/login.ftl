@@ -61,11 +61,11 @@
 
     <div class="layui-trans layadmin-user-login-footer">
         <p>© 2018 <a href="http://www.layui.com/" target="_blank">layui.com</a></p>
-        <#--<p>-->
-            <#--<span><a href="http://www.layui.com/admin/#get" target="_blank">获取授权</a></span>-->
-            <#--<span><a href="http://www.layui.com/admin/pro/" target="_blank">在线演示</a></span>-->
-            <#--<span><a href="http://www.layui.com/admin/" target="_blank">前往官网</a></span>-->
-        <#--</p>-->
+        <p>
+            <span><a href="https://www.baidu.com" target="_blank">百度</a></span>
+            <span><a href="https://www.taobao.com" target="_blank">淘宝</a></span>
+            <span><a href="https://www.jd.com" target="_blank">京东</a></span>
+        </p>
     </div>
 
     <div class="ladmin-user-login-theme">
