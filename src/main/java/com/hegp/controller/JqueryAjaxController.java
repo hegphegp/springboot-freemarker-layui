@@ -10,7 +10,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/v1/jquery-ajax")
 public class JqueryAjaxController {
-    @PostMapping(value = "/request-body")
+    @RequestMapping(value = "/request-body")
     public RequestResponse testRequestBody(@RequestBody Map params, HttpServletResponse response) {
         Map map = new HashMap();
         map.put("username", params.get("username"));
