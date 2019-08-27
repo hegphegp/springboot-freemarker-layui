@@ -9,6 +9,7 @@
 (function() {
     window.AjaxGet = function AjaxGet(opts) {
         opts.type  = "get";
+        // opts.contentType = "application/x-www-form-urlencoded;charset=UTF-8"
         new Ajax(opts);
     }
 
@@ -43,14 +44,21 @@
     function Ajax(opts) {
         this.type          = opts.type || "get";
         this.url           = opts.url;
-        this.contentType   = opts.contentType || "application/json; charset=UTF-8"; // "application/x-www-form-urlencoded;charset=UTF-8"
-        this.params        = opts.params || {};
+        this.cache         = opts.cache || false;
+        this.async         = opts.async || false;
+        this.urlParams     = opts.urlParams || {};
+        this.bodyParams    = opts.bodyParams || "{}";
         this.isShowLoader  = opts.isShowLoader || false;
         this.dataType      = opts.dataType || "json";
         this.beforeSend    = opts.beforeSend; // 有多个参数的时候,不知道怎么传,参数传进来了,怎么用,放到请求头,请求体,URL参数,怎么放,定不下来
         this.success       = opts.success;    // 与jQuery的ajax的success函数名保持一致
         this.error         = opts.error;      // 与jQuery的ajax的error函数名保持一致
         this.complete      = opts.complete;   // 与jQuery的ajax的complete函数名保持一致
+        if (this.type.toLocaleLowerCase()!=="get") {
+            this.bodyParams  = "";
+            this.contentType = opts.contentType || "application/json; charset=UTF-8"; // "application/x-www-form-urlencoded;charset=UTF-8"
+        }
+        console.log("\n\n\n\n\n\n   "+typeof(this.params)+"  \n\n\n\n\n\n\n");
         this.init();
     }
 
@@ -79,9 +87,10 @@
             $.ajax({
                 type: this.type,
                 url: this.url,
-                data: this.params,
+                // data: this.bodyParams,
+                data: this.urlParams,
                 dataType: this.dataType,
-                contentType: this.contentType,
+                // contentType: this.contentType,
                 // beforeSend: this.showLoader(),
                 success: function(data, status, XMLHttpRequest) {
                     arguments.length;
