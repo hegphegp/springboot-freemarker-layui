@@ -7,7 +7,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.ResolvableType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -36,7 +35,6 @@ public class JPAServiceImpl<T, ID> implements JPAService<T, ID>, ApplicationCont
                 for (String key : map.keySet()) {
                     Set<EntityType<?>> set = map.get(key).getMetamodel().getEntities();
                     for (EntityType entityType : set) {
-
                         entityManagerMap.put(entityType.getJavaType(), map.get(key));
                         simpleJpaRepositoryMap.put(entityType.getJavaType(), new SimpleJpaRepository(entityType.getJavaType(), map.get(key)));
                     }
@@ -61,46 +59,54 @@ public class JPAServiceImpl<T, ID> implements JPAService<T, ID>, ApplicationCont
     }
 
     @Override
+    @Transactional
     public T save(T entity) {
         Assert.notNull(entity, "entity must not be null!");
         return simpleJpaRepository.save(entity);
     }
 
     @Override
+    @Transactional
     public List<T> save(T[] entities) {
         Assert.notNull(entities, "entities must not be null!");
         return simpleJpaRepository.saveAll(Arrays.asList(entities));
     }
 
     @Override
+    @Transactional
     public List<T> save(List<T> entities) {
         Assert.notNull(entities, "entities must not be null!");
         return simpleJpaRepository.saveAll(entities);
     }
 
     @Override
+    @Transactional
     public void delete(T entity) {
         Assert.notNull(entity, "entity must not be null!");
         simpleJpaRepository.delete(entity);
     }
 
     @Override
+    @Transactional
     public void delete(T[] entities) {
         Assert.notNull(entities, "entities must not be null!");
         simpleJpaRepository.deleteInBatch(Arrays.asList(entities));
     }
 
     @Override
+    @Transactional
     public void delete(List<T> entities) {
         simpleJpaRepository.deleteInBatch(entities);
     }
 
     @Override
+    @Transactional
     public void deleteById(ID id) {
         simpleJpaRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public void deleteById(ID[] ids) {
         Assert.notNull(ids, "Ids must not be null!");
         List<T> entities = simpleJpaRepository.findAllById(Arrays.asList(ids));
@@ -108,6 +114,7 @@ public class JPAServiceImpl<T, ID> implements JPAService<T, ID>, ApplicationCont
     }
 
     @Override
+    @Transactional
     public void deleteById(List<ID> ids) {
         Assert.notNull(ids, "Ids must not be null!");
         List<T> entities = simpleJpaRepository.findAllById(ids);

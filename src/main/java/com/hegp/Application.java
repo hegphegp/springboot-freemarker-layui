@@ -43,7 +43,6 @@ public class Application implements CommandLineRunner {
     }
 
     @Override
-    @Transactional
     public void run(String... args) throws Exception {
         UserEntity userEntity = new UserEntity();
         userEntity.setDel(false);
@@ -51,6 +50,18 @@ public class Application implements CommandLineRunner {
         userEntity.setNickname("nickname");
         userEntity.setUsername("username");
         userService.save(userEntity);
+        userEntity = new UserEntity();
+        userEntity.setDel(false);
+        userEntity.setPhone("phone");
+        userEntity.setNickname("nickname");
+        userEntity.setUsername("username");
+        userService.save(userEntity);
+//        try {
+//            System.out.println(mapper.writeValueAsString(sqlRepository.queryResultList("SELECT id, username FROM sys_user")));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        userService.delete(userEntity);
 //        InitJpaRepositoryConfig.simpleJpaRepositoryMap.get(UserEntity.class).save(userEntity);
         // JPA世纪巨坑的方法,执行getOne(String id)方法居然不查数据库,此时任何的解释的都是苍白的,绝对不可以用这个方法
         // userRepository.getOne(userEntity.getId());
@@ -64,7 +75,7 @@ public class Application implements CommandLineRunner {
         userEntity.setPhone("phone");
         userEntity.setNickname("nickname");
         userEntity.setUsername("username");
-
+        userService.save(userEntity);
         userService.getSimpleJpaRepository().findById("00");
 
         Specification<UserEntity> specification = Specifications.<UserEntity>and()
