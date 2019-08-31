@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.ResolvableType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -19,15 +20,23 @@ import java.util.*;
 public class JPAServiceImpl<T, ID> implements JPAService<T, ID>, ApplicationContextAware {
     public EntityManager entityManager;
     public SimpleJpaRepository<T, ID> simpleJpaRepository;
-
+    public  ApplicationContext applicationContext;
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        /**
+        String[] ret=applicationContext.getBeanDefinitionNames();
+        for(String curr:ret){
+            System.out.println(curr);
+        }
+         */
+        this.applicationContext = applicationContext;
         synchronized (JPAServiceImpl.class) {
             if (simpleJpaRepositoryMap.size()==0) {
                 Map<String, EntityManager> map = applicationContext.getBeansOfType(EntityManager.class);
                 for (String key : map.keySet()) {
                     Set<EntityType<?>> set = map.get(key).getMetamodel().getEntities();
                     for (EntityType entityType : set) {
+
                         entityManagerMap.put(entityType.getJavaType(), map.get(key));
                         simpleJpaRepositoryMap.put(entityType.getJavaType(), new SimpleJpaRepository(entityType.getJavaType(), map.get(key)));
                     }

@@ -23,8 +23,6 @@ import java.util.*;
 //@EnableEurekaClient
 @SpringBootApplication
 public class Application implements CommandLineRunner {
-//    @Autowired
-//    private SimpleJpaRepository simpleJpaRepository;
     @Autowired
     private UserService userService;
     @Autowired
@@ -45,7 +43,7 @@ public class Application implements CommandLineRunner {
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public void run(String... args) throws Exception {
         UserEntity userEntity = new UserEntity();
         userEntity.setDel(false);
@@ -56,21 +54,18 @@ public class Application implements CommandLineRunner {
 //        InitJpaRepositoryConfig.simpleJpaRepositoryMap.get(UserEntity.class).save(userEntity);
         // JPA世纪巨坑的方法,执行getOne(String id)方法居然不查数据库,此时任何的解释的都是苍白的,绝对不可以用这个方法
         // userRepository.getOne(userEntity.getId());
-//        testUser();
-//        testTest();
+        testUser();
+        testTest();
     }
 
     private void testUser() {
-        SimpleJpaRepository simpleJpaRepository = new SimpleJpaRepository(UserEntity.class, em);
         UserEntity userEntity = new UserEntity();
         userEntity.setDel(false);
         userEntity.setPhone("phone");
         userEntity.setNickname("nickname");
         userEntity.setUsername("username");
-//        simpleJpaRepository.save(userEntity);
 
         userService.getSimpleJpaRepository().findById("00");
-        Map map = JPAService.simpleJpaRepositoryMap;
 
         Specification<UserEntity> specification = Specifications.<UserEntity>and()
                 .like("username", "%a%")
@@ -78,8 +73,6 @@ public class Application implements CommandLineRunner {
                 .like("nickname", "%a%")
                 .build();
         List<UserEntity> users = userService.getSimpleJpaRepository().findAll(specification);
-
-        simpleJpaRepository.findAll(specification);
 
         String usernameCondition = "";
         String condition = "";
@@ -112,6 +105,9 @@ public class Application implements CommandLineRunner {
         sqlRepository.queryPageResultList(sql,1,1, false);
         try {
             System.out.println(mapper.writeValueAsString(sqlRepository.queryResultList("SELECT id, username FROM sys_user")));
+            List<String> list = Arrays.asList("00","11","22","33","44");
+            String id = "0000";
+            System.out.println(mapper.writeValueAsString(sqlRepository.queryResultList("SELECT id, username FROM sys_user WHERE id IN ?1 AND id=?2", list, id)));
         } catch (Exception e) {
             e.printStackTrace();
         }
