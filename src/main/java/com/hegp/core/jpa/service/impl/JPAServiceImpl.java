@@ -19,7 +19,7 @@ import java.util.*;
 public class JPAServiceImpl<T, ID> implements JPAService<T, ID>, ApplicationContextAware {
     public EntityManager entityManager;
     public SimpleJpaRepository<T, ID> simpleJpaRepository;
-    public  ApplicationContext applicationContext;
+    public ApplicationContext applicationContext;
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         /**

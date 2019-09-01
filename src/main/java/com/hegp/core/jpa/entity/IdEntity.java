@@ -1,4 +1,4 @@
-package com.hegp.entity.base;
+package com.hegp.core.jpa.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 

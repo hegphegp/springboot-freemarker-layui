@@ -1,6 +1,6 @@
 package com.hegp.entity;
 
-import com.hegp.entity.base.IdEntity;
+import com.hegp.core.jpa.entity.IdEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Index;
