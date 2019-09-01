@@ -39,7 +39,7 @@ public interface JPAService<T, ID> {
 
     EntityManager getEntityManager(Class clazz);
 
-    SimpleJpaRepository<T, ID> getSimpleJpaRepository();
+    SimpleJpaRepository<T, ID> getRepository();
 
-    SimpleJpaRepository<T, ID> getSimpleJpaRepository(Class clazz);
+    SimpleJpaRepository<T, ID> getRepository(Class clazz);
 }

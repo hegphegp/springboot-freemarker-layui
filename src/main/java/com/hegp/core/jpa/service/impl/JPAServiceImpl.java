@@ -137,12 +137,12 @@ public class JPAServiceImpl<T, ID> implements JPAService<T, ID>, ApplicationCont
     }
 
     @Override
-    public SimpleJpaRepository<T, ID> getSimpleJpaRepository() {
+    public SimpleJpaRepository<T, ID> getRepository() {
         return simpleJpaRepository;
     }
 
     @Override
-    public SimpleJpaRepository<T, ID> getSimpleJpaRepository(Class clazz) {
+    public SimpleJpaRepository<T, ID> getRepository(Class clazz) {
         return simpleJpaRepositoryMap.get(clazz);
     }
 }
