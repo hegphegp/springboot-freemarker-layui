@@ -24,7 +24,7 @@ spring:
 #      spring.h2.console.enabled=true                   //设置为true，程序开启时就会启动h2 web console(默认是false) 访问URL是 http://localhost:8080/h2-console
 
 server:
-  port: 8087
+  port: 8088
   servlet:
     context-path: /test-test
 #  freemarker静态资源配置
@@ -63,6 +63,6 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://192.168.0.100:8761/eureka
+      defaultZone: http://localhost:8761/eureka
 
 
