@@ -20,6 +20,8 @@ public class JPAServiceImpl<T, ID> implements JPAService<T, ID>, ApplicationCont
     public EntityManager entityManager;
     public SimpleJpaRepository<T, ID> simpleJpaRepository;
     public ApplicationContext applicationContext;
+    public Class currentEntityClass;
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         /**
@@ -47,8 +49,11 @@ public class JPAServiceImpl<T, ID> implements JPAService<T, ID>, ApplicationCont
 
     // 获取泛型的具体实现类,Spring的提供工具类,用于获取继承的父类是泛型的信息
     public Class getGenericEntityClass() {
-        ResolvableType resolvableType = ResolvableType.forClass(getClass());
-        return resolvableType.getSuperType().getGeneric(0).resolve();
+        if (currentEntityClass==null) {
+            ResolvableType resolvableType = ResolvableType.forClass(getClass());
+            currentEntityClass = resolvableType.getSuperType().getGeneric(0).resolve();
+        }
+        return currentEntityClass;
     }
 
     @Override

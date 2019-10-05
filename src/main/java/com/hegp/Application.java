@@ -11,7 +11,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 //import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
@@ -20,7 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.*;
 
-@EnableEurekaClient
+//@EnableEurekaClient
 @SpringBootApplication
 public class Application implements CommandLineRunner {
     @Autowired
@@ -64,7 +63,7 @@ public class Application implements CommandLineRunner {
         userEntity.setNickname("nickname2");
         userEntity.setUsername("username2");
         userService.save(userEntity);
-        userService.getRepository().findById("00");
+        userService.getRepository().findById(userEntity.getId());
 
         Specification specification = Specifications.and()
                 .like("username", "%a%")
@@ -100,6 +99,7 @@ public class Application implements CommandLineRunner {
     }
 
     private ObjectMapper mapper = new ObjectMapper();
+
     private void testTest() throws JsonProcessingException {
         String sql = " SELECT su.id, su.username, su.nickname, su.phone, su.del, sr.id role_id, sr.name role_name FROM sys_user_role_rel surr " +
                      " LEFT JOIN sys_user su ON surr.user_id = su.id " +
