@@ -37,6 +37,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'cn.hutool:hutool-core:5.1.0'
     implementation 'com.h2database:h2'
     implementation 'com.google.guava:guava:28.1-jre'
     implementation 'com.alibaba:fastjson:1.2.61'
