@@ -49,7 +49,7 @@ public class Application implements CommandLineRunner {
         userService.delete(userEntity);
 //        InitJpaRepositoryConfig.simpleJpaRepositoryMap.get(UserEntity.class).save(userEntity);
         // JPA世纪巨坑的方法,执行getOne(String id)方法居然不查数据库,此时任何的解释的都是苍白的,绝对不可以用这个方法
-        // userRepository.getOne(userEntity.getId());
+//        userRepository.getOne("0000");
         testUser();
         testTest();
     }

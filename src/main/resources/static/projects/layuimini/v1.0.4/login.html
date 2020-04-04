@@ -36,7 +36,7 @@
                     </div>
                     <div class="layui-col-xs5">
                         <div style="margin-left: 10px;">
-                            <img src="../../captcha" class="layadmin-user-login-codeimg" id="login-captcha">
+                            <img src="../../../captcha" class="layadmin-user-login-codeimg" id="login-captcha">
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
 
         // 图形验证码
         $('#login-captcha').click(function () {
-            this.src = '../../captcha?t=' + (new Date).getTime();
+            this.src = '../../../captcha?t=' + (new Date).getTime();
         });
 
         form.render();

@@ -1,7 +1,9 @@
 package com.hegp.core.filter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -26,17 +28,16 @@ import java.util.stream.Collectors;
 @Component
 public class UrlMappingFilter extends OncePerRequestFilter {
 
-    @Value("${server.servlet.context-path}")
-    private String contextPath;
+    private static final Logger logger = LoggerFactory.getLogger(UrlMappingFilter.class);
+    @Autowired
+    private ServerProperties serverProperties;
     private Integer contextPathLength = 0;
     private PathMatcher pathMatcher = new AntPathMatcher();
     private Map<String, Object> allUrlMap = new HashMap();
     private Map<String, Object> directUrlMap = new HashMap();
 
-    /**  "/users" 是否也匹配 "/users/".  */
-    private boolean useTrailingSlashMatch = true;
-    /**  "/users" 是否也匹配 "/users.*"  */
-    private boolean useSuffixPatternMatch = false;
+    /**  /users 是否也匹配 /users/  */
+    private boolean useTrailingSlashMatch = false;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -44,6 +45,7 @@ public class UrlMappingFilter extends OncePerRequestFilter {
     @PostConstruct
     public void init() {
         /** 通过 Method和URL定位接口的权限 */
+        String contextPath = serverProperties.getServlet().getContextPath();
         if (StringUtils.hasText(contextPath)) {
             contextPathLength = contextPath.length();
         }
@@ -61,8 +63,8 @@ public class UrlMappingFilter extends OncePerRequestFilter {
                 }
             }
         }
-//        System.out.println(allUrlMap);
-//        System.out.println(directUrlMap);
+        logger.debug(allUrlMap.toString());
+        logger.debug(directUrlMap.toString());
     }
 
     public List<String> getMatchingPatterns(String methodAndRequestURI) {
@@ -100,16 +102,17 @@ public class UrlMappingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        request.getContextPath();
         String requestURI = contextPathLength>0? request.getRequestURI().substring(contextPathLength):request.getRequestURI();
-        System.out.println("请求的URL是  "+request.getMethod()+" "+requestURI);
+        logger.debug("请求的URL是  "+request.getMethod()+" "+requestURI);
         Object object = directUrlMap.get(request.getMethod()+" "+requestURI);
         if (object!=null) { //对该URL镜像权限拦截
-            System.out.println("最优匹配的URL是 "+request.getMethod()+" "+requestURI);
+            logger.debug("最优匹配的URL是 "+request.getMethod()+" "+requestURI);
         } else { // 可能是通配符动态URL
             List<String> matches = getMatchingPatterns(request.getMethod()+" "+requestURI);
             if (!ObjectUtils.isEmpty(matches)) {
-                System.out.println("匹配到的URL有 "+matches);
-                System.out.println("最优匹配的URL是 "+matches.get(0));
+                logger.debug("匹配到的URL有 "+matches);
+                logger.debug("最优匹配的URL是 "+matches.get(0));
             }
         }
         filterChain.doFilter(request, response);
