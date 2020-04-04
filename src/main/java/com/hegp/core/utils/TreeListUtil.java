@@ -8,6 +8,9 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.*;
 
+/**
+ * 这个类存在大量的逻辑问题，不纠结还可以，如果要纠结，追求不了完美
+ */
 public class TreeListUtil {
 
     public static void main(String[] args) {
@@ -17,6 +20,7 @@ public class TreeListUtil {
         list.add(new HashMap(){{put("id", 3); put("pid", 2); put("name", "秦州区"); put("sort", 3); }});
         list.add(new HashMap(){{put("id", 2); put("pid", null); put("name", "北京市"); put("sort", 4); }});
         list.add(new HashMap(){{put("id", 1); put("pid", null); put("name", "甘肃省"); put("sort", 1); }});
+        list.add(new HashMap(){{put("id", 6); put("pid", 5); put("name", "昌平区"); put("sort", 6); }});
         System.out.println(JSON.toJSONString(buildAscTreeList(list, "id", "pid", "children", "sort")));
         System.out.println(JSON.toJSONString(buildDescTreeList(list, "id", "pid", "children", "sort")));
     }
@@ -31,17 +35,17 @@ public class TreeListUtil {
      * @return
      */
     public static <T> List<T> buildAscTreeList(List<T> list, String idField, String parentIdField, String childrenField, String sortField) {
-        Map<Object, List<T>> parentIdAndParentObjectMap = new HashMap<>();
-        List<T> rootList = buildTreeList(list, idField, parentIdField, childrenField, parentIdAndParentObjectMap);
+        Map<Object, List<T>> parentIdAndChildrenListMap = new HashMap<>();
+        List<T> rootList = buildTreeList(list, idField, parentIdField, childrenField, parentIdAndChildrenListMap);
         if (ObjectUtils.isEmpty(list) || StringUtils.isEmpty(sortField)) return rootList;
         if (list.get(0) instanceof Map) {
-            for (Object key : parentIdAndParentObjectMap.keySet()) {
-                sortAscMap((List<Map<Object, Object>>)parentIdAndParentObjectMap.get(key), sortField);
+            for (Object key : parentIdAndChildrenListMap.keySet()) {
+                sortAscMap((List<Map<Object, Object>>)parentIdAndChildrenListMap.get(key), sortField);
             }
             sortAscMap((List<Map<Object, Object>>)rootList, sortField);
         } else {
-            for (Object key : parentIdAndParentObjectMap.keySet()) {
-                sortAsc(parentIdAndParentObjectMap.get(key), sortField);
+            for (Object key : parentIdAndChildrenListMap.keySet()) {
+                sortAsc(parentIdAndChildrenListMap.get(key), sortField);
             }
             sortAsc(rootList, sortField);
         }
@@ -75,20 +79,20 @@ public class TreeListUtil {
         return rootList;
     }
 
-    private static <T> List<T> buildTreeList(List<T> list, String idField, String parentIdField, String childrenField, Map<Object, List<T>> parentIdAndParentObjectMap) {
+    private static <T> List<T> buildTreeList(List<T> list, String idField, String parentIdField, String childrenField, Map<Object, List<T>> parentIdAndChildrenListMap) {
         // 非空校验,冗余的垃圾校验代码
         if (ObjectUtils.isEmpty(list)) return new ArrayList<>();
         list.remove(null);
         if (ObjectUtils.isEmpty(list)) return new ArrayList<>();
 
         if (list.get(0) instanceof Map) {
-            return buildMapTreeList(list, idField, parentIdField, childrenField, parentIdAndParentObjectMap);
+            return buildMapTreeList(list, idField, parentIdField, childrenField, parentIdAndChildrenListMap);
         } else {
-            return buildObjectTreeList(list, idField, parentIdField, childrenField, parentIdAndParentObjectMap);
+            return buildObjectTreeList(list, idField, parentIdField, childrenField, parentIdAndChildrenListMap);
         }
     }
 
-    private static <T> List<T> buildMapTreeList(List<T> list, String idField, String parentIdField, String childrenField, Map<Object, List<T>> parentIdAndParentObjectMap) {
+    private static <T> List<T> buildMapTreeList(List<T> list, String idField, String parentIdField, String childrenField, Map<Object, List<T>> parentIdAndChildrenListMap) {
         List<Map> rootList = new ArrayList<>();
         List<Map> listMap = (List<Map>)list;
         Map<Object, List<Map>> childrenMapObject = new HashMap<>();
@@ -106,12 +110,12 @@ public class TreeListUtil {
         }
         for (Object key:childrenMapObject.keySet()) {
             map.get(key).put(childrenField, childrenMapObject.get(key));
-            parentIdAndParentObjectMap.put(key, (List<T>)childrenMapObject.get(key));
+            parentIdAndChildrenListMap.put(key, (List<T>)childrenMapObject.get(key));
         }
         return (List<T>)rootList;
     }
 
-    private static <T> List<T> buildObjectTreeList(List<T> list, String idField, String parentIdField, String childrenField, Map<Object, List<T>> parentIdAndParentObjectMap) {
+    private static <T> List<T> buildObjectTreeList(List<T> list, String idField, String parentIdField, String childrenField, Map<Object, List<T>> parentIdAndChildrenListMap) {
         List<T> rootList = new ArrayList<>();
         Map<Object, T> map = new HashMap<>();
         for (T t : list) {
@@ -123,7 +127,7 @@ public class TreeListUtil {
             if (parent == null) {
                 rootList.add(t);
             } else {
-                List<T> children = notExistsThenAdd(parentIdAndParentObjectMap, beanMap, parentIdField, t);
+                List<T> children = notExistsThenAdd(parentIdAndChildrenListMap, beanMap, parentIdField, t);
                 BeanMap.create(parent).put(childrenField, children);
             }
         }
