@@ -43,8 +43,8 @@ server:
   port: 8088
   servlet:
     context-path: /test-test
-# http://localhost:8088/test-test/example001/index.html
-# http://localhost:8088/test-test/example001/login.html
+# http://localhost:8088/test-test/projects/WeAdmin/index.html
+# http://localhost:8088/test-test/projects/WeAdmin/login.html
 # http://localhost:8088/test-test/projects/layuimini/v1.0.4/login.html
 # http://localhost:8088/test-test/projects/layuimini/v2.0.3/login.html
 # http://localhost:8088/test-test/projects/layuimini/v2.0.3/login.html
