@@ -33,6 +33,7 @@ public class UrlMappingFilter extends OncePerRequestFilter {
     private ServerProperties serverProperties;
     private Integer contextPathLength = 0;
     private PathMatcher pathMatcher = new AntPathMatcher();
+    private Map<RestfulApi, RestfulApi> restfulApiMap = new HashMap<>();
     private Map<String, Object> allUrlMap = new HashMap();
     private Map<String, Object> directUrlMap = new HashMap();
 
@@ -56,6 +57,8 @@ public class UrlMappingFilter extends OncePerRequestFilter {
             Set<String> methods = getMethodStr(rmi.getMethodsCondition().getMethods());
             for (String url:set) {
                 for (String method:methods) {
+                    RestfulApi restfulApi = new RestfulApi(method, url);
+                    restfulApiMap.put(restfulApi, restfulApi);
                     allUrlMap.put(method+" "+url, null); // null要替换成具体的业务逻辑对象
                     if (pathMatcher.isPattern(url)==false) {
                         directUrlMap.put(method+" "+url, null); // null要替换成具体的业务逻辑对象
@@ -118,4 +121,46 @@ public class UrlMappingFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    public static class RestfulApi {
+        private String method;
+        private String url;
+
+        public RestfulApi() {
+        }
+
+        public RestfulApi(String method, String url) {
+            this.method = method;
+            this.url = url;
+        }
+
+        public String getMethod() {
+            return method;
+        }
+
+        public void setMethod(String method) {
+            this.method = method;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            RestfulApi that = (RestfulApi) o;
+            return method.equals(that.method) &&
+                    url.equals(that.url);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(method, url);
+        }
+    }
 }

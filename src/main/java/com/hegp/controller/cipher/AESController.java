@@ -6,6 +6,8 @@ import com.hegp.core.utiils.encrypt.aes.AesCBCUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/v1/crypto")
 public class AESController {
@@ -13,7 +15,8 @@ public class AESController {
     private String ivParameter = "ABCDEF1234123412";//偏移量,可自行修改
 
     @PostMapping(value = "/aes-cbc-iv")
-    public RequestResponse applicationJson(@RequestBody LoginParams loginParams) throws Exception {
+    public RequestResponse applicationJson(HttpServletResponse response, @RequestBody LoginParams loginParams) throws Exception {
+//        response.sendRedirect("https://www.baidu.com");
         if (StringUtils.isEmpty(loginParams.getUsername())||StringUtils.isEmpty(loginParams.getPassword())) {
             throw new RuntimeException("username/password不允许为空");
         }

@@ -10,13 +10,13 @@
 </head>
 <body>
 
-<form action="" id='submitform'>
+<div>
     username: <br>
     <input type="text" id="username" name="username" value="" required="required"> <br>
     password: <br>
     <input type="text" id="password" name="password" value="" required="required"> <br><br>
-    <input type="submit" value="Submit">
-</form>
+    <input type="submit" value="Submit" onclick="ajaxData()">
+</div>
 
 <script type="text/javascript" language="javascript">
 
@@ -48,44 +48,43 @@
         return CryptoJS.enc.Utf8.stringify(decrypt).toString();
     }
 
-    (function() {
-
-        $("#submitform").on("submit", function(ev) {
-            var key = "1234123412ABCDEF";
-            var iv = "ABCDEF1234123412";
-            var username = encryptAesCBC($("#username").val(), key, iv);
-            var password = encryptAesCBC($("#password").val(), key, iv);
-            console.log(username);
-            console.log(password);
-            var jsonData = {"username": username, "password": password};
-            $.getJSON({
-                headers: {
-                    Accept: "application/json; charset=utf-8"
-                },
-                url:'${Request.basePath!""}/v1/crypto/aes-cbc-iv',
-                data: JSON.stringify(jsonData),
-                type:'post',
-                cache:false,
-                contentType:"application/json",
-                success:function(data) {
-                    if(data.code == 200 ) {
-                        layui.layer.msg("返回的username==>> "+decryptAESCBC(data.data.username, key, iv)+"  返回的password==>>  "+decryptAESCBC(data.data.password, key, iv));
-                    } else {
-                        layui.layer.msg("修改失败！"+JSON.stringify(data));
-                    }
-                },
-                error:function(XMLHttpRequest, textStatus, errorThrown) {
-                    layui.layer.msg("请求对象XMLHttpRequest: "+XMLHttpRequest+"错误类型textStatus: "+textStatus+"异常对象errorThrown: "+errorThrown);
-                    console.log(errorThrown);
+    function ajaxData() {
+        var key = "1234123412ABCDEF";
+        var iv = "ABCDEF1234123412";
+        var username = encryptAesCBC($("#username").val(), key, iv);
+        var password = encryptAesCBC($("#password").val(), key, iv);
+        console.log(username);
+        console.log(password);
+        var jsonData = {"username": username, "password": password};
+        $.getJSON({
+            headers: {
+                Accept: "application/json; charset=utf-8"
+            },
+            url:'${Request.basePath!""}/v1/crypto/aes-cbc-iv',
+            data: JSON.stringify(jsonData),
+            type:'post',
+            cache:false,
+            contentType:"application/json",
+            success:function(data) {
+                if(data.code == 200 ) {
+                    layui.layer.msg("返回的username==>> "+decryptAESCBC(data.data.username, key, iv)+"  返回的password==>>  "+decryptAESCBC(data.data.password, key, iv));
+                } else {
+                    layui.layer.msg("修改失败！"+JSON.stringify(data));
                 }
-            });
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown) {
+                layui.layer.msg("请求对象XMLHttpRequest: "+XMLHttpRequest+"错误类型textStatus: "+textStatus+"异常对象errorThrown: "+errorThrown);
+                console.log(errorThrown);
+            }
+        });
 
-            var newUsername = encryptAesECB($("#username").val(), key);
-            var newPassword = encryptAesECB($("#password").val(), key);
-            console.log(newUsername);
-            console.log(newPassword);
-            var newJsonData = {"username": newUsername, "password": newPassword};
-            $.getJSON({
+        /**
+         var newUsername = encryptAesECB($("#username").val(), key);
+         var newPassword = encryptAesECB($("#password").val(), key);
+         console.log(newUsername);
+         console.log(newPassword);
+         var newJsonData = {"username": newUsername, "password": newPassword};
+         $.getJSON({
                 headers: {
                     Accept: "application/json; charset=utf-8"
                 },
@@ -107,13 +106,12 @@
                 }
             });
 
-            // 阻止submit表单提交
-            ev.preventDefault();
-            // 或者return false
-            // return false;
-        });
-
-    })()
+         // 阻止submit表单提交
+         ev.preventDefault();
+         // 或者return false
+         // return false;
+         */
+    }
 
 </script>
 

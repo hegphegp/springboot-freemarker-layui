@@ -1,10 +1,12 @@
 package com.hegp.entity;
 
 import com.hegp.core.jpa.entity.IdEntity;
+import com.hegp.domain.UserRole;
+import org.hibernate.annotations.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "sys_user",
@@ -17,7 +19,9 @@ public class UserEntity extends IdEntity {
     private String nickname;
     private String phone;
     private Boolean del;
-
+    @Type(type="com.hegp.convert.ArrayJsonUserType")
+    @Column(columnDefinition="text")
+    private List<UserRole> UserRoles;
     public UserEntity() { }
 
     public String getUsername() {
@@ -50,5 +54,13 @@ public class UserEntity extends IdEntity {
 
     public void setDel(Boolean del) {
         this.del = del;
+    }
+
+    public List<UserRole> getUserRoles() {
+        return UserRoles;
+    }
+
+    public void setUserRoles(List<UserRole> userRoles) {
+        UserRoles = userRoles;
     }
 }

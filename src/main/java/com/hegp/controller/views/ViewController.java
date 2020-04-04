@@ -18,7 +18,7 @@ import java.util.Enumeration;
 @RequestMapping("/pages")
 public class ViewController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    private int contextPathLength = -1;
     /**
      * 一个星号通配符只能匹配一层URL，两个星号通配符可以匹配多层URL
      * @param request
@@ -28,14 +28,18 @@ public class ViewController {
     @GetMapping(value={"/**"})
     public ModelAndView page(HttpServletRequest request) {
 //        getCurrentIpAddress();
+        if (contextPathLength==-1) {
+            String contextPath = request.getContextPath();
+            contextPathLength = StringUtils.hasText(contextPath)? contextPath.length():0;
+        }
         String contextPath = request.getContextPath();
         String requestURI = StringUtils.hasText(contextPath)? request.getRequestURI().substring(contextPath.length()):request.getRequestURI();
+
         if (requestURI.endsWith(".html")) {
-            requestURI = requestURI.substring(0, requestURI.length()-5);
+            requestURI = requestURI.substring("/pages".length()+contextPathLength, requestURI.length()-5);
         } else if (requestURI.endsWith(".htm")) {
-            requestURI = requestURI.substring(0, requestURI.length()-4);
+            requestURI = requestURI.substring("/pages".length()+contextPathLength, requestURI.length()-4);
         }
-        requestURI = requestURI.substring("/pages".length());
         return new ModelAndView(requestURI);
     }
 

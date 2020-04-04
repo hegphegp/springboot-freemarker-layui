@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * MariaDBDialect共用这个类
+ */
 public class MySQLDialect {
     public final static Map<String, String> property2SqlColumnMap = new HashMap<>();
     public final static Map<String, Integer> lengthLimitColumnMap = new HashMap<>();
