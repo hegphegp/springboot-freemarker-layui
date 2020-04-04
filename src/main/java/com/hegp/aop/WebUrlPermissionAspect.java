@@ -1,6 +1,5 @@
 package com.hegp.aop;
 
-import com.hegp.controller.HttpSessionController;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -53,9 +52,9 @@ public class WebUrlPermissionAspect {
         if (request==null || "1".equals(request.getAttribute("has-check-url-permisions"))) {
             return;
         }
-        getAllApi();
+//        getAllApi();
         // 如果将来排除万难绝对要动态配置URL的权限或者参数时, 再在此处添加逻辑实现
-//        System.out.println("000000000000");
+        // TO-DO
     }
 
     public void getAllApi() {

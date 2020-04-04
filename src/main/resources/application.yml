@@ -47,6 +47,9 @@ server:
 # http://localhost:8088/test-test/example001/login.html
 # http://localhost:8088/test-test/projects/layuimini/v1.0.4/login.html
 # http://localhost:8088/test-test/projects/layuimini/v2.0.3/login.html
+# http://localhost:8088/test-test/projects/layuimini/v2.0.3/login.html
+# http://localhost:8088/test-test/pages/back-end/login/login.html
+
 #  freemarker静态资源配置
 spring.freemarker.template-loader-path: classpath:/templates
 spring.freemarker.cache: false
