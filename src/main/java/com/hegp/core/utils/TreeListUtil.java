@@ -1,4 +1,4 @@
-package com.hegp;
+package com.hegp.core.utils;
 
 import com.alibaba.fastjson.JSON;
 import org.springframework.cglib.beans.BeanMap;
@@ -8,17 +8,17 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.*;
 
-public class List2TreeList {
+public class TreeListUtil {
 
     public static void main(String[] args) {
         List list = new ArrayList<>();
         list.add(new HashMap(){{put("id", 5); put("pid", 4); put("name", "昌平区"); put("sort", 5); }});
-        list.add(new HashMap(){{put("id", 4); put("pid", 0); put("name", "北京市"); put("sort", 4); }});
+        list.add(new HashMap(){{put("id", 4); put("pid", null); put("name", "北京市"); put("sort", 4); }});
         list.add(new HashMap(){{put("id", 3); put("pid", 2); put("name", "秦州区"); put("sort", 3); }});
-        list.add(new HashMap(){{put("id", 2); put("pid", 0); put("name", "北京市"); put("sort", 4); }});
-        list.add(new HashMap(){{put("id", 1); put("pid", 0); put("name", "甘肃省"); put("sort", 1); }});
-        System.out.println(JSON.toJSONString(asc(list, "id", "pid", "children", "sort")));
-        System.out.println(JSON.toJSONString(desc(list, "id", "pid", "children", "sort")));
+        list.add(new HashMap(){{put("id", 2); put("pid", null); put("name", "北京市"); put("sort", 4); }});
+        list.add(new HashMap(){{put("id", 1); put("pid", null); put("name", "甘肃省"); put("sort", 1); }});
+        System.out.println(JSON.toJSONString(buildAscTreeList(list, "id", "pid", "children", "sort")));
+        System.out.println(JSON.toJSONString(buildDescTreeList(list, "id", "pid", "children", "sort")));
     }
 
     /**
@@ -26,27 +26,26 @@ public class List2TreeList {
      * @param idField
      * @param parentIdField
      * @param childrenField
-     * @param sortField 排序列可以为空,不为空必须是数字类型
+     * @param sortField 排序列可以为空, 不为空必须是数字类型
      * @param <T>
      * @return
      */
-    public static <T> List<T> asc(List<T> list, String idField, String parentIdField, String childrenField, String sortField) {
-        List<T> root = new ArrayList<>();
-        Map<Object, List<T>> childrenMap = new HashMap<>();
-        assemblyList(list, idField, parentIdField, childrenField, root, childrenMap);
-        if (list==null || list.size()==0 || StringUtils.isEmpty(sortField)) return root;
+    public static <T> List<T> buildAscTreeList(List<T> list, String idField, String parentIdField, String childrenField, String sortField) {
+        Map<Object, List<T>> parentIdAndParentObjectMap = new HashMap<>();
+        List<T> rootList = buildTreeList(list, idField, parentIdField, childrenField, parentIdAndParentObjectMap);
+        if (ObjectUtils.isEmpty(list) || StringUtils.isEmpty(sortField)) return rootList;
         if (list.get(0) instanceof Map) {
-            for (Object key : childrenMap.keySet()) {
-                sortAscMap((List<Map<Object, Object>>)childrenMap.get(key), sortField);
+            for (Object key : parentIdAndParentObjectMap.keySet()) {
+                sortAscMap((List<Map<Object, Object>>)parentIdAndParentObjectMap.get(key), sortField);
             }
-            sortAscMap((List<Map<Object, Object>>)root, sortField);
+            sortAscMap((List<Map<Object, Object>>)rootList, sortField);
         } else {
-            for (Object key : childrenMap.keySet()) {
-                sortAsc(childrenMap.get(key), sortField);
+            for (Object key : parentIdAndParentObjectMap.keySet()) {
+                sortAsc(parentIdAndParentObjectMap.get(key), sortField);
             }
-            sortAsc(root, sortField);
+            sortAsc(rootList, sortField);
         }
-        return root;
+        return rootList;
     }
 
     /**
@@ -54,43 +53,42 @@ public class List2TreeList {
      * @param idField
      * @param parentIdField
      * @param childrenField
-     * @param sortField 排序列必须是数字类型
+     * @param sortField 排序列可以为空, 不为空必须是数字类型
      * @param <T>
      * @return
      */
-    public static <T> List<T> desc(List<T> list, String idField, String parentIdField, String childrenField, String sortField) {
-        List<T> root = new ArrayList<>();
-        Map<Object, List<T>> childrenMap = new HashMap<>();
-        assemblyList(list, idField, parentIdField, childrenField, root, childrenMap);
-        if (list==null || list.size()==0 || StringUtils.isEmpty(sortField)) return root;
+    public static <T> List<T> buildDescTreeList(List<T> list, String idField, String parentIdField, String childrenField, String sortField) {
+        Map<Object, List<T>> parentIdAndParentObjectMap = new HashMap<>();
+        List<T> rootList = buildTreeList(list, idField, parentIdField, childrenField, parentIdAndParentObjectMap);
+        if (ObjectUtils.isEmpty(list) || StringUtils.isEmpty(sortField)) return rootList;
         if (list.get(0) instanceof Map) {
-            for (Object key : childrenMap.keySet()) {
-                sortDescMap((List<Map<Object, Object>>)childrenMap.get(key), sortField);
+            for (Object key : parentIdAndParentObjectMap.keySet()) {
+                sortDescMap((List<Map<Object, Object>>)parentIdAndParentObjectMap.get(key), sortField);
             }
-            sortDescMap((List<Map<Object, Object>>)root, sortField);
+            sortDescMap((List<Map<Object, Object>>)rootList, sortField);
         } else {
-            for (Object key:childrenMap.keySet()) {
-                sortDesc(childrenMap.get(key), sortField);
+            for (Object key:parentIdAndParentObjectMap.keySet()) {
+                sortDesc(parentIdAndParentObjectMap.get(key), sortField);
             }
-            sortDesc(root, sortField);
+            sortDesc(rootList, sortField);
         }
-        return root;
+        return rootList;
     }
 
-    private static <T> void assemblyList(List<T> list, String idField, String parentIdField, String childrenField, List<T> root, Map<Object, List<T>> childrenMap) {
+    private static <T> List<T> buildTreeList(List<T> list, String idField, String parentIdField, String childrenField, Map<Object, List<T>> parentIdAndParentObjectMap) {
         // 非空校验,冗余的垃圾校验代码
-        if (ObjectUtils.isEmpty(list)) return;
+        if (ObjectUtils.isEmpty(list)) return new ArrayList<>();
         list.remove(null);
-        if (ObjectUtils.isEmpty(list)) return;
+        if (ObjectUtils.isEmpty(list)) return new ArrayList<>();
 
         if (list.get(0) instanceof Map) {
-            assemblyListMap(list, idField, parentIdField, childrenField, root, childrenMap);
+            return buildMapTreeList(list, idField, parentIdField, childrenField, parentIdAndParentObjectMap);
         } else {
-            assemblyListObject(list, idField, parentIdField, childrenField, root, childrenMap);
+            return buildObjectTreeList(list, idField, parentIdField, childrenField, parentIdAndParentObjectMap);
         }
     }
 
-    private static <T> void assemblyListMap(List<T> list, String idField, String parentIdField, String childrenField, List<T> root, Map<Object, List<T>> childrenMap) {
+    private static <T> List<T> buildMapTreeList(List<T> list, String idField, String parentIdField, String childrenField, Map<Object, List<T>> parentIdAndParentObjectMap) {
         List<Map> rootList = new ArrayList<>();
         List<Map> listMap = (List<Map>)list;
         Map<Object, List<Map>> childrenMapObject = new HashMap<>();
@@ -108,12 +106,13 @@ public class List2TreeList {
         }
         for (Object key:childrenMapObject.keySet()) {
             map.get(key).put(childrenField, childrenMapObject.get(key));
-            childrenMap.put(key, (List<T>)childrenMapObject.get(key));
+            parentIdAndParentObjectMap.put(key, (List<T>)childrenMapObject.get(key));
         }
-        root.addAll((List<T>)rootList);
+        return (List<T>)rootList;
     }
 
-    private static <T> void assemblyListObject(List<T> list, String idField, String parentIdField, String childrenField, List<T> root, Map<Object, List<T>> childrenMap) {
+    private static <T> List<T> buildObjectTreeList(List<T> list, String idField, String parentIdField, String childrenField, Map<Object, List<T>> parentIdAndParentObjectMap) {
+        List<T> rootList = new ArrayList<>();
         Map<Object, T> map = new HashMap<>();
         for (T t : list) {
             map.put(BeanMap.create(t).get(idField), t);
@@ -122,12 +121,13 @@ public class List2TreeList {
             BeanMap beanMap = BeanMap.create(t);
             T parent = map.get(beanMap.get(parentIdField));
             if (parent == null) {
-                root.add(t);
+                rootList.add(t);
             } else {
-                List<T> children = notExistsThenAdd(childrenMap, beanMap, parentIdField, t);
+                List<T> children = notExistsThenAdd(parentIdAndParentObjectMap, beanMap, parentIdField, t);
                 BeanMap.create(parent).put(childrenField, children);
             }
         }
+        return rootList;
     }
 
     private static <T> List<T> notExistsThenAdd(Map<Object, List<T>> mapList, Map map, String parentIdField, T item) {

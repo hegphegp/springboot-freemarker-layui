@@ -1,8 +1,8 @@
 package com.hegp.controller.cipher;
 
 import com.hegp.core.domain.RequestResponse;
-import com.hegp.core.utiils.encrypt.aes.AesECBUtils;
-import com.hegp.core.utiils.encrypt.aes.AesCBCUtils;
+import com.hegp.core.utils.encrypt.aes.AesECBUtils;
+import com.hegp.core.utils.encrypt.aes.AesCBCUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 

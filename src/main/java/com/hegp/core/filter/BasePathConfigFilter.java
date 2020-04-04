@@ -1,6 +1,6 @@
 package com.hegp.core.filter;
 
-import com.hegp.core.utiils.ServletUtils;
+import com.hegp.core.utils.ServletUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

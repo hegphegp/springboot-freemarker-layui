@@ -1,4 +1,4 @@
-package com.hegp.core.utiils.encrypt.aes;
+package com.hegp.core.utils.encrypt.aes;
 
 import java.util.Base64;
 

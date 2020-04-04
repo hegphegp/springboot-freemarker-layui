@@ -34,7 +34,9 @@ public class UrlMappingFilter extends OncePerRequestFilter {
     private Integer contextPathLength = 0;
     private PathMatcher pathMatcher = new AntPathMatcher();
     private Map<RestfulApi, RestfulApi> restfulApiMap = new HashMap<>();
+    // URL有通配符的Map
     private Map<String, Object> allUrlMap = new HashMap();
+    // 完全匹配的URL的Map
     private Map<String, Object> directUrlMap = new HashMap();
 
     /**  /users 是否也匹配 /users/  */

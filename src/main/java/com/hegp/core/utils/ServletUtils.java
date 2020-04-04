@@ -1,4 +1,4 @@
-package com.hegp.core.utiils;
+package com.hegp.core.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,11 @@ public class ServletUtils {
         }
     }
 
-    public static String getCurrentReqOriginIp() {
+    /**
+     * 获取当前请求的原始客户端IP地址
+     * @return
+     */
+    public static String getCurrentRequestOriginIp() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String ip = request.getHeader("X-Forwarded-For");
         if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
