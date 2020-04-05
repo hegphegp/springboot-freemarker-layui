@@ -16,58 +16,45 @@
     <![endif]-->
 </head>
 <body style="display: none">
-<div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
+<div class="layadmin-user-login layadmin-user-display-show" style="display: none;">
 
-    <div class="layadmin-user-login-main">
-        <div class="layadmin-user-login-box layadmin-user-login-header">
-            <h2 id="system-title-name"></h2>
-            <p>登录</p>
-        </div>
-        <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
-            <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label>
-                <input type="text" name="username" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input">
+    <form action="">
+        <div class="layadmin-user-login-main">
+            <div class="layadmin-user-login-box layadmin-user-login-header">
+                <h2 id="system-title-name"></h2>
             </div>
-            <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
-                <input type="password" name="password" id="LAY-user-login-password" lay-verify="required" placeholder="密码" class="layui-input">
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-row">
-                    <div class="layui-col-xs7">
-                        <label class="layadmin-user-login-icon layui-icon layui-icon-vercode" for="LAY-user-login-vercode"></label>
-                        <input type="text" name="vercode" id="LAY-user-login-vercode" lay-verify="required" placeholder="图形验证码" class="layui-input">
-                    </div>
-                    <div class="layui-col-xs5">
-                        <div style="margin-left: 10px;">
-                            <img src="../../../../captcha" class="layadmin-user-login-codeimg" id="login-captcha">
+            <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-username"></label>
+                    <input type="text" name="username" lay-verify="required" placeholder="用户名" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password"></label>
+                    <input type="password" name="password" lay-verify="required" placeholder="密码" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-row">
+                        <div class="layui-col-xs7">
+                            <label class="layadmin-user-login-icon layui-icon layui-icon-vercode"></label>
+                            <input type="text" name="vercode" lay-verify="required" placeholder="图形验证码" class="layui-input">
+                        </div>
+                        <div class="layui-col-xs5">
+                            <div style="margin-left: 10px;">
+                                <img class="layadmin-user-login-codeimg" id="login-captcha">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-login-submit">登 入</button>
-            </div>
-            <div class="layui-form-item">
-                <a href="reg.html" class="layadmin-link">注册帐号</a>
-                <a href="forget.html" class="layadmin-link" style="float: right;">忘记密码</a>
+                <div class="layui-form-item">
+                    <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="login-submit">登 入</button>
+                </div>
+                <div class="layui-form-item">
+                    <a href="reg.html" class="layadmin-link">注册帐号</a>
+                    <a href="forget.html" class="layadmin-link" style="float: right;">忘记密码</a>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="ladmin-user-login-theme">
-      <script type="text/html" template>
-        <ul>
-          <li data-theme=""><img src="{{ layui.setter.base }}style/res/bg-none.jpg"></li>
-          <li data-theme="#03152A" style="background-color: #03152A;"></li>
-          <li data-theme="#2E241B" style="background-color: #2E241B;"></li>
-          <li data-theme="#50314F" style="background-color: #50314F;"></li>
-          <li data-theme="#344058" style="background-color: #344058;"></li>
-          <li data-theme="#20222A" style="background-color: #20222A;"></li>
-        </ul>
-      </script>
-    </div>
-
+    </form>
 </div>
 
 <script type="text/javascript" src="../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
@@ -78,10 +65,10 @@
         systemTitleName: "系统名称",
         systemIcon: "title-icon.png"
     };
+
     // $(document).beforeactivate()
     //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
     $(function() {
-        var layer = layui.layer;
         $('title').text(systemConfig.systemTitleName);  //动态设置标题
         $('#system-title-name').text(systemConfig.systemTitleName);  //动态设置标题
         // $("link[rel*='icon']").attr("href", "https://www.baidu.com/icon-url.png"); // 这种全路径的写法可以渲染图标
@@ -93,6 +80,7 @@
         var titleIconUrl = toAbsURL(window.location.href+"/../../images/"+systemConfig.systemIcon);
         $("link[rel*='icon']").attr("href", titleIconUrl);
         // 图形验证码
+        $('#login-captcha').attr("src", '../../../../captcha?t=' + (new Date).getTime());
         $('#login-captcha').click(function () {
             this.src = '../../../../captcha?t=' + (new Date).getTime();
         });
@@ -104,6 +92,29 @@
         a.href = url;
         return a.href;
     }
+
+
+    // 进行登录操作
+    layui.form.on('submit(login-submit)', function (data) {
+        data = data.field;
+        // alert(JSON.stringify(data));
+        // if (data.username == '') {
+        //     layer.msg('用户名不能为空');
+        //     return false;
+        // }
+        // if (data.password == '') {
+        //     layer.msg('密码不能为空');
+        //     return false;
+        // }
+        // if (data.captcha == '') {
+        //     layer.msg('验证码不能为空');
+        //     return false;
+        // }
+        layer.msg('登录成功', function () {
+            window.location = './';
+        });
+        return false;
+    });
 </script>
 </body>
 </html>

@@ -20,31 +20,31 @@
 
 <script type="text/javascript" language="javascript">
 
-    function encryptAesCBC(word, key, iv) {
+    function encryptAesCBC(needEncryptStr, key, iv) {
         var key = CryptoJS.enc.Utf8.parse(key);
         var iv = CryptoJS.enc.Utf8.parse(iv);
-        var srcs = CryptoJS.enc.Utf8.parse(word);
+        var srcs = CryptoJS.enc.Utf8.parse(needEncryptStr);
         var encrypted = CryptoJS.AES.encrypt(srcs, key, {iv:iv, mode:CryptoJS.mode.CBC, padding:CryptoJS.pad.Pkcs7});
         return encrypted.toString();
     }
 
-    function decryptAESCBC(word, key, iv) {
+    function decryptAESCBC(needDecryptStr, key, iv) {
         var key = CryptoJS.enc.Utf8.parse(key);
         var iv = CryptoJS.enc.Utf8.parse(iv);
-        var decrypt = CryptoJS.AES.decrypt(word, key, {iv:iv, mode:CryptoJS.mode.CBC, padding:CryptoJS.pad.Pkcs7});
+        var decrypt = CryptoJS.AES.decrypt(needDecryptStr, key, {iv:iv, mode:CryptoJS.mode.CBC, padding:CryptoJS.pad.Pkcs7});
         return CryptoJS.enc.Utf8.stringify(decrypt).toString();
     }
 
-    function encryptAesECB(word, key) {
+    function encryptAesECB(needEncryptStr, key) {
         var key = CryptoJS.enc.Utf8.parse(key);
-        var srcs = CryptoJS.enc.Utf8.parse(word);
+        var srcs = CryptoJS.enc.Utf8.parse(needEncryptStr);
         var encrypted = CryptoJS.AES.encrypt(srcs, key, {mode:CryptoJS.mode.ECB, padding:CryptoJS.pad.Pkcs7});
         return encrypted.toString();
     }
 
-    function decryptAesECB(word, key) {
+    function decryptAesECB(needDecryptStr, key) {
         var key = CryptoJS.enc.Utf8.parse(key);
-        var decrypt = CryptoJS.AES.decrypt(word, key, {mode:CryptoJS.mode.ECB, padding:CryptoJS.pad.Pkcs7});
+        var decrypt = CryptoJS.AES.decrypt(needDecryptStr, key, {mode:CryptoJS.mode.ECB, padding:CryptoJS.pad.Pkcs7});
         return CryptoJS.enc.Utf8.stringify(decrypt).toString();
     }
 
@@ -88,7 +88,7 @@
                 headers: {
                     Accept: "application/json; charset=utf-8"
                 },
-                url:'${Request.basePath!""}/v1/crypto/aes-ecb-no-iv',
+                url:'${Request.basePath!""}/v1/crypto/aes-cbc-no-iv',
                 data: JSON.stringify(newJsonData),
                 type:'post',
                 cache:false,
