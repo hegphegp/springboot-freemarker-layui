@@ -15,6 +15,7 @@ public class TreeListUtil {
 
     public static void main(String[] args) {
         List list = new ArrayList<>();
+        list.add(new HashMap(){{put("id", 7); put("pid", 0); put("name", "北京市"); put("sort", 7); }});
         list.add(new HashMap(){{put("id", 5); put("pid", 4); put("name", "昌平区"); put("sort", 5); }});
         list.add(new HashMap(){{put("id", 4); put("pid", null); put("name", "北京市"); put("sort", 4); }});
         list.add(new HashMap(){{put("id", 3); put("pid", 2); put("name", "秦州区"); put("sort", 3); }});
