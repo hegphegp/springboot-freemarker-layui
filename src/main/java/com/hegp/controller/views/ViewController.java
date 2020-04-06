@@ -16,13 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 
 /** 每个页面的URL单独配置一个@GetMapping接口，显得很傻逼，用通配符的方式映射 */
 @Controller
-@RequestMapping("${front-end-pages.prefix:/pages}")
+@RequestMapping("${controller-page.prefix:/pages}")
 public class ViewController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private int contextPathLength = -1;
-    @Value("${front-end-pages.prefix:/pages}")
-    private String frontEndPagesPrefix;
-    private int frontEndPagesPrefixLength = 0;
+    @Value("${controller-page.prefix:/pages}")
+    private String controllerPagePrefix;
+    private int controllerPagePrefixLength = 0;
 
     @Autowired
     private ServerProperties serverProperties;
@@ -30,8 +30,8 @@ public class ViewController {
     public void init() {
         String contextPath = serverProperties.getServlet().getContextPath();
         contextPathLength = StringUtils.hasText(contextPath)? contextPath.length():0;
-        if (StringUtils.hasText(frontEndPagesPrefix)) {
-            frontEndPagesPrefixLength = frontEndPagesPrefix.length();
+        if (StringUtils.hasText(controllerPagePrefix)) {
+            controllerPagePrefixLength = controllerPagePrefix.length();
         }
     }
 
@@ -48,16 +48,13 @@ public class ViewController {
 //        ServletUtils.printAllHeaders();
 //        ServletUtils.getCurrentReqOriginIp();
         String requestURI = request.getRequestURI();
-        if (contextPathLength!=0) {
-            requestURI = requestURI.substring(contextPathLength);
-        }
 
         if (requestURI.endsWith(".html")) {
-            requestURI = requestURI.substring(frontEndPagesPrefixLength, requestURI.length()-5);
+            requestURI = requestURI.substring(contextPathLength+ controllerPagePrefixLength, requestURI.length()-5);
         } else if (requestURI.endsWith(".htm")) {
-            requestURI = requestURI.substring(frontEndPagesPrefixLength, requestURI.length()-4);
+            requestURI = requestURI.substring(contextPathLength+ controllerPagePrefixLength, requestURI.length()-4);
         } else {
-            requestURI = requestURI.substring(frontEndPagesPrefixLength);
+            requestURI = requestURI.substring(contextPathLength+ controllerPagePrefixLength);
         }
         return new ModelAndView(requestURI);
     }

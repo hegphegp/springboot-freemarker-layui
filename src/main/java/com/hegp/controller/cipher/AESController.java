@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * java的PKCS5Padding 对应的 CryptoJS 是 CryptoJS.pad.Pkcs7
+ */
 @RestController
 @RequestMapping("/v1/crypto")
 public class AESController {

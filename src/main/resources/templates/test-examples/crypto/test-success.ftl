@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>只有这一种方式,能力有限,没必要浪费生命去研究,如果想浪费生命,直接去S</title>
     <script src="${Request.basePath!""}/plugins/jquery/v1.12.4/jquery.min.js"></script>
-    <script src="${Request.basePath!""}/plugins/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+    <script src="${Request.basePath!""}/plugins/crypto-js/crypto-utils.js"></script>
     <script src="${Request.basePath!""}/plugins/layui/v2.4.5/layui.all.js"></script>
 </head>
 </head>
@@ -19,34 +19,6 @@
 </div>
 
 <script type="text/javascript" language="javascript">
-
-    function encryptAesCBC(needEncryptStr, key, iv) {
-        var key = CryptoJS.enc.Utf8.parse(key);
-        var iv = CryptoJS.enc.Utf8.parse(iv);
-        var srcs = CryptoJS.enc.Utf8.parse(needEncryptStr);
-        var encrypted = CryptoJS.AES.encrypt(srcs, key, {iv:iv, mode:CryptoJS.mode.CBC, padding:CryptoJS.pad.Pkcs7});
-        return encrypted.toString();
-    }
-
-    function decryptAESCBC(needDecryptStr, key, iv) {
-        var key = CryptoJS.enc.Utf8.parse(key);
-        var iv = CryptoJS.enc.Utf8.parse(iv);
-        var decrypt = CryptoJS.AES.decrypt(needDecryptStr, key, {iv:iv, mode:CryptoJS.mode.CBC, padding:CryptoJS.pad.Pkcs7});
-        return CryptoJS.enc.Utf8.stringify(decrypt).toString();
-    }
-
-    function encryptAesECB(needEncryptStr, key) {
-        var key = CryptoJS.enc.Utf8.parse(key);
-        var srcs = CryptoJS.enc.Utf8.parse(needEncryptStr);
-        var encrypted = CryptoJS.AES.encrypt(srcs, key, {mode:CryptoJS.mode.ECB, padding:CryptoJS.pad.Pkcs7});
-        return encrypted.toString();
-    }
-
-    function decryptAesECB(needDecryptStr, key) {
-        var key = CryptoJS.enc.Utf8.parse(key);
-        var decrypt = CryptoJS.AES.decrypt(needDecryptStr, key, {mode:CryptoJS.mode.ECB, padding:CryptoJS.pad.Pkcs7});
-        return CryptoJS.enc.Utf8.stringify(decrypt).toString();
-    }
 
     function ajaxData() {
         var key = "1234123412ABCDEF";
