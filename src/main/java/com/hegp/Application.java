@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wenhao.jpa.Specifications;
 import com.hegp.core.jpa.SQLRepository;
+import com.hegp.entity.SnowflakeTestEntity;
 import com.hegp.entity.UserEntity;
 import com.hegp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+import java.sql.Timestamp;
 import java.util.*;
 
 //@EnableEurekaClient
@@ -32,13 +39,32 @@ public class Application implements CommandLineRunner {
     private RoleResourceRelService roleResourceRelService;
     @Autowired
     private SQLRepository sqlRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
+        JpaRepository<SnowflakeTestEntity, Long> repository = new SimpleJpaRepository(SnowflakeTestEntity.class, entityManager);
+        SnowflakeTestEntity entity = new SnowflakeTestEntity();
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        entity.setCreateAt(now);
+        entity.setUpdateAt(now);
+        repository.save(entity);
+        System.out.println(entity.getId());
+
+        Thread.sleep(100);
+        entity = new SnowflakeTestEntity();
+        now = new Timestamp(System.currentTimeMillis());
+        entity.setCreateAt(now);
+        entity.setUpdateAt(now);
+        repository.save(entity);
+        System.out.println(entity.getId());
+
         UserEntity userEntity = new UserEntity();
         userEntity.setDel(false);
         userEntity.setPhone("phone1");
