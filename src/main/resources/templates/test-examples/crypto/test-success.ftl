@@ -44,8 +44,8 @@
                     layui.layer.msg("修改失败！"+JSON.stringify(data));
                 }
             },
-            error:function(XMLHttpRequest, textStatus, errorThrown) {
-                layui.layer.msg("请求对象XMLHttpRequest: "+XMLHttpRequest+"错误类型textStatus: "+textStatus+"异常对象errorThrown: "+errorThrown);
+            error:function(xhr, textStatus, errorThrown) {
+                layui.layer.msg("请求对象XMLHttpRequest: "+xhr+"错误类型textStatus: "+textStatus+"异常对象errorThrown: "+errorThrown);
                 console.log(errorThrown);
             }
         });

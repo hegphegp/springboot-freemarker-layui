@@ -37,7 +37,7 @@ public class BasePathConfigFilter extends OncePerRequestFilter {
          *  proxy_set_header X-Forwarded-Proto $scheme;
          *  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
          */
-//        ServletUtils.printAllHeaders();
+        ServletUtils.printAllHeaders();
         filterChain.doFilter(request, response);
     }
 

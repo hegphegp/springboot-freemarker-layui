@@ -78,6 +78,13 @@ public class Application implements CommandLineRunner {
 //        userRepository.getOne("0000");
         testUser();
         testTest();
+
+        LinkedList list = new LinkedList();
+
+        list.add(1);
+        list.addFirst(2);
+        list.removeLast();
+        list.toArray();
     }
 
     private void testUser() throws JsonProcessingException {
