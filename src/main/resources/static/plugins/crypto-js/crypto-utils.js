@@ -29,6 +29,7 @@ function decryptAESCBC(needDecryptStr, key, iv) {
     return CryptoJS.enc.Utf8.stringify(decrypt).toString();
 }
 
+/plugins/crypto-js/crypto-utils.js
 function encryptAesECB(needEncryptStr, key) {
     var key = CryptoJS.enc.Utf8.parse(key);
     var content = CryptoJS.enc.Utf8.parse(needEncryptStr);

@@ -33,13 +33,12 @@ public class UrlMappingFilter extends OncePerRequestFilter {
     private ServerProperties serverProperties;
     private Integer contextPathLength = 0;
     private PathMatcher pathMatcher = new AntPathMatcher();
-    private Map<RestfulApi, RestfulApi> restfulApiMap = new HashMap<>();
-    // URL有通配符的Map
-    private Map<String, Object> allUrlMap = new HashMap();
+    // URL有通配符, 或者占位符的Map
+    private Set<String> patternUrls = new HashSet();
     // 完全匹配的URL的Map
-    private Map<String, Object> directUrlMap = new HashMap();
+    private Set<String> directUrls = new HashSet();
 
-    /**  /users 是否也匹配 /users/  */
+    //  /users 是否也匹配 /users/
     private boolean useTrailingSlashMatch = false;
 
     @Autowired
@@ -56,25 +55,24 @@ public class UrlMappingFilter extends OncePerRequestFilter {
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = mapping.getHandlerMethods();// 就是这个
         for (RequestMappingInfo rmi : handlerMethods.keySet()) {
             Set<String> set = rmi.getPatternsCondition().getPatterns();
-            Set<String> methods = getMethodStr(rmi.getMethodsCondition().getMethods());
             for (String url:set) {
+                Set<String> methods = getMethodStr(rmi.getMethodsCondition().getMethods());
                 for (String method:methods) {
-                    RestfulApi restfulApi = new RestfulApi(method, url);
-                    restfulApiMap.put(restfulApi, restfulApi);
-                    allUrlMap.put(method+" "+url, null); // null要替换成具体的业务逻辑对象
-                    if (pathMatcher.isPattern(url)==false) {
-                        directUrlMap.put(method+" "+url, null); // null要替换成具体的业务逻辑对象
+                    if (pathMatcher.isPattern(url)==false && !url.contains("{") && !url.contains("}")) {
+                        directUrls.add(method+" "+url);
+                    } else {
+                        patternUrls.add(method+" "+url);
                     }
                 }
             }
         }
-        logger.debug(allUrlMap.toString());
-        logger.debug(directUrlMap.toString());
+        logger.debug(directUrls.toString());
+        logger.debug(patternUrls.toString());
     }
 
     public List<String> getMatchingPatterns(String methodAndRequestURI) {
         List<String> matches = new ArrayList<>();
-        for (String pattern :allUrlMap.keySet()) {
+        for (String pattern :patternUrls) {
             String match = getMatchingPattern(pattern, methodAndRequestURI);
             if (match != null) {
                 matches.add(match);
@@ -107,11 +105,10 @@ public class UrlMappingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        request.getContextPath();
         String requestURI = contextPathLength>0? request.getRequestURI().substring(contextPathLength):request.getRequestURI();
         logger.debug("请求的URL是  "+request.getMethod()+" "+requestURI);
-        Object object = directUrlMap.get(request.getMethod()+" "+requestURI);
-        if (object!=null) { //对该URL镜像权限拦截
+        boolean exists = directUrls.contains(request.getMethod()+" "+requestURI);
+        if (exists) { //对该URL镜像权限拦截
             logger.debug("最优匹配的URL是 "+request.getMethod()+" "+requestURI);
         } else { // 可能是通配符动态URL
             List<String> matches = getMatchingPatterns(request.getMethod()+" "+requestURI);
@@ -123,46 +120,4 @@ public class UrlMappingFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    public static class RestfulApi {
-        private String method;
-        private String url;
-
-        public RestfulApi() {
-        }
-
-        public RestfulApi(String method, String url) {
-            this.method = method;
-            this.url = url;
-        }
-
-        public String getMethod() {
-            return method;
-        }
-
-        public void setMethod(String method) {
-            this.method = method;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            RestfulApi that = (RestfulApi) o;
-            return method.equals(that.method) &&
-                    url.equals(that.url);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(method, url);
-        }
-    }
 }

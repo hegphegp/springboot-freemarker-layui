@@ -98,4 +98,5 @@ eureka:
 
 logging:
   level:
-    org.hibernate: info
+    org.hibernate: debug
+    com.hegp: debug

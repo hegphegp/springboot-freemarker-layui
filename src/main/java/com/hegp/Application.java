@@ -49,6 +49,12 @@ public class Application implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
+        for (int i = 0; i < 50; i++) {
+            System.out.println(UUID.randomUUID().toString().replaceAll("-",""));
+        }
+
+
+
         JpaRepository<SnowflakeTestEntity, Long> repository = new SimpleJpaRepository(SnowflakeTestEntity.class, entityManager);
         SnowflakeTestEntity entity = new SnowflakeTestEntity();
         Timestamp now = new Timestamp(System.currentTimeMillis());

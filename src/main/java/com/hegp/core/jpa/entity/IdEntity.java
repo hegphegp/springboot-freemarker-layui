@@ -18,9 +18,11 @@ public class IdEntity implements Idable<String>, Serializable {
     private String id;
     private Timestamp createAt;
     private Timestamp updateAt;
-
+    private String createBy;
+    private String updateBy;
     public IdEntity() { }
 
+    @Override
     public String getId() {
         return this.id;
     }
@@ -43,5 +45,21 @@ public class IdEntity implements Idable<String>, Serializable {
 
     public void setUpdateAt(Timestamp updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
     }
 }
