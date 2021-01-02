@@ -1,4 +1,4 @@
-package com.hegp.core.utils;
+package com.hegp.core.utils.sql;
 
 public class SqlParam {
     private String column;
