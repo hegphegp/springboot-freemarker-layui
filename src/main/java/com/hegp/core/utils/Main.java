@@ -1,5 +1,7 @@
 package com.hegp.core.utils;
 
+import com.hegp.core.utils.sql.SqlParam;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

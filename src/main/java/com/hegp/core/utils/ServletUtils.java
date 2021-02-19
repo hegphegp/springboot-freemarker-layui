@@ -18,8 +18,19 @@ import java.util.Optional;
 public class ServletUtils {
     private static final Logger logger = LoggerFactory.getLogger(ServletUtils.class);
 
+    public static void printAllUrlParams() {
+        HttpServletRequest request = getCurrentRequest();
+        if (request==null) return;
+        Enumeration<String> params = request.getParameterNames();
+        while (params.hasMoreElements()) {
+            String paramName = params.nextElement();
+            logger.debug(paramName + "  ===>>>  " + request.getHeader(paramName));
+        }
+    }
+
     public static void printAllHeaders() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpServletRequest request = getCurrentRequest();
+        if (request==null) return;
         Enumeration<String> headers = request.getHeaderNames();
         while (headers.hasMoreElements()) {
             String headerName = headers.nextElement();
@@ -27,8 +38,14 @@ public class ServletUtils {
         }
     }
 
+    /**
+     * 请求经过nginx网关，zuul网关，spring-cloud-gateway网关转发后，URL部分路径会丢失，因此要获取最原始的URL，然后减去当前请求的URL，
+     * 找到该服务的相对URL，然后把相对URL作为spring-mvc-freemarker中js，或者css，请求的根路径
+     * @return
+     */
     public static String getBasePathWhenRequestIsForwarded() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        if (request==null) return null;
         String xForwardedUri = request.getHeader("x-forwarded-uri");
         Assert.isTrue(StringUtils.hasText(xForwardedUri), "请配置请求头的 x-forwarded-uri 参数");
         String requestURI = request.getRequestURI();
@@ -63,7 +80,6 @@ public class ServletUtils {
         return ((ServletRequestAttributes) attributes).getResponse();
     }
 
-    /** 获取当前请求对应的HttpServletResponse */
     public static HttpSession getCurrentSession() {
         HttpServletRequest request = getCurrentRequest();
         if (ObjectUtils.isEmpty(request)) {
@@ -98,7 +114,7 @@ public class ServletUtils {
         if (request==null) return null;
         /**
          * zuul网关会自动封装 x-forwarded-host 参数
-         * zuul网关不会自动封装 x-forwarded-uri 参数, 要手动写代码补上去
+         * zuul网关不会自动封装 x-forwarded-uri 参数, 要手动写代码给zuul过滤器的请求头添加x-forwarded-uri参数
          */
         String xForwardedHost = request.getHeader("x-forwarded-host");
         if (StringUtils.hasText(xForwardedHost)) {
@@ -108,6 +124,10 @@ public class ServletUtils {
         }
     }
 
+    /**
+     * API网关请求入口最原始的URL(除去schema://ip:port部分外的URL)
+     * @return
+     */
     public static String getOriginForwardedUrl() {
         HttpServletRequest request = getCurrentRequest();
         if (request==null) return null;

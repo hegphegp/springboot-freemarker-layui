@@ -1,4 +1,4 @@
-package com.hegp.core.utils;
+package com.hegp.core.utils.sql;
 
 import java.io.Serializable;
 

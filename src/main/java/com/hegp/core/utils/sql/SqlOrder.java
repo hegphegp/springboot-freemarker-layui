@@ -1,4 +1,4 @@
-package com.hegp.core.utils;
+package com.hegp.core.utils.sql;
 
 public class SqlOrder {
     private String column;
