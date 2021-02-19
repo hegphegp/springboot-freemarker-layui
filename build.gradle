@@ -38,11 +38,12 @@ repositories {
 }
 
 dependencies {
-    implementation 'cn.hutool:hutool-all:5.2.5'
+    implementation 'cn.hutool:hutool-all:5.5.7'
     implementation 'com.h2database:h2'
     implementation 'com.google.guava:guava:28.1-jre'
     implementation 'com.alibaba:fastjson:1.2.68'
     implementation 'com.github.wenhao:jpa-spec:3.2.4'
+//    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config:2.2.3.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-freemarker'

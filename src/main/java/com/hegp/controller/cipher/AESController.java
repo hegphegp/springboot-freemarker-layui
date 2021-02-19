@@ -3,7 +3,7 @@ package com.hegp.controller.cipher;
 import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.symmetric.AES;
-import com.hegp.core.domain.RequestResponse;
+import com.hegp.core.domain.Result;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +21,7 @@ public class AESController {
     private AES aesNoIV = new AES(Mode.CBC, Padding.PKCS5Padding, sKey.getBytes());
 
     @PostMapping(value = "/aes-cbc-iv")
-    public RequestResponse applicationJson(HttpServletResponse response, @RequestBody LoginParams loginParams) {
+    public Result applicationJson(HttpServletResponse response, @RequestBody LoginParams loginParams) {
 //        response.sendRedirect("https://www.baidu.com");
         if (StringUtils.isEmpty(loginParams.getUsername())||StringUtils.isEmpty(loginParams.getPassword())) {
             throw new RuntimeException("username/password不允许为空");
@@ -29,18 +29,18 @@ public class AESController {
         System.out.println("AES/CBC/PKCS5Padding方式  ===>>>  "+loginParams.getUsername()+"  解密后===>>>  "+ aesIV.decryptStr(loginParams.getUsername()));
         System.out.println("AES/CBC/PKCS5Padding方式  ===>>>  "+loginParams.getPassword()+"  解密后===>>>  "+ aesIV.decryptStr(loginParams.getPassword()));
 
-        return RequestResponse.build(loginParams);
+        return Result.build(loginParams);
     }
 
     //  "AES/ECB/PKCS5Padding"
     @PostMapping(value = "/aes-cbc-no-iv")
-    public RequestResponse applicationJsonSuccess(@RequestBody LoginParams loginParams) {
+    public Result applicationJsonSuccess(@RequestBody LoginParams loginParams) {
         if (StringUtils.isEmpty(loginParams.getUsername())||StringUtils.isEmpty(loginParams.getPassword())) {
             throw new RuntimeException("username/password不允许为空");
         }
         System.out.println("AES/ECB/PKCS5Padding方式  ===>>>  "+loginParams.getUsername()+"  解密后===>>>  "+ aesNoIV.decryptStr(loginParams.getUsername()));
         System.out.println("AES/ECB/PKCS5Padding方式  ===>>>  "+loginParams.getPassword()+"  解密后===>>>  "+ aesNoIV.decryptStr(loginParams.getPassword()));
-        return RequestResponse.build(loginParams);
+        return Result.build(loginParams);
     }
 
     public static class LoginParams {

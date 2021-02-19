@@ -135,7 +135,7 @@ public class Application implements CommandLineRunner {
             fieldValues.put("del", null);
             list.add(fieldValues);
         }
-        String sql = SqlUtils.getInsertManySql(tableName, list);
+        String sql = SqlUtils.getInsertOneSql(tableName, list.get(0));
         System.out.println(sql);
         namedParameterJdbcTemplate.batchUpdate(sql, list.toArray(new Map[]{}));
     }
