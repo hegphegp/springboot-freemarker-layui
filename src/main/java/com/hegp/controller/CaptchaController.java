@@ -13,8 +13,8 @@ import javax.servlet.http.HttpSession;
 //import javax.validation.Valid;
 //import java.awt.Font;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 public class CaptchaController {
@@ -25,8 +25,8 @@ public class CaptchaController {
 
     @PostConstruct
     public void init() throws IOException, FontFormatException {
-        File file = ResourcesUtils.getFileByPath(fontFilePath);
-        font = Font.createFont(Font.TRUETYPE_FONT, file);
+        InputStream inputStream = ResourcesUtils.getInputStreamByPath(fontFilePath);
+        font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
         font = font.deriveFont(Font.PLAIN+Font.ITALIC+Font.BOLD, 33);
     }
 

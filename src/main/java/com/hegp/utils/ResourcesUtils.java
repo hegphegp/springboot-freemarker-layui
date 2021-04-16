@@ -4,10 +4,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public final class ResourcesUtils {
 
@@ -32,13 +29,13 @@ public final class ResourcesUtils {
      * @param path 文件路径
      * @return 字符串
      */
-    public static File getFileByPath(String path) throws IOException {
+    public static InputStream getInputStreamByPath(String path) throws IOException {
         if (path.startsWith("classpath:")) {
             path = path.substring(10);
             Resource resource = new ClassPathResource(path);
-            return resource.getFile();
+            return resource.getInputStream();
         } else {
-            return new File(path);
+            return new FileInputStream(path);
         }
     }
 }
