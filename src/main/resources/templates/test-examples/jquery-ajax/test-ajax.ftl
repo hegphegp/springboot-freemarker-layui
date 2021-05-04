@@ -19,48 +19,41 @@
 </form>
 
 <script type="text/javascript" language="javascript">
-    (function() {
-        $("#submitform").on("submit", function(ev) {
-            new AjaxReq({
-                type: "post",
-                carryToken: false,
-                url: '${Request.basePath!""}/v1/jquery-ajax/x-www-form-urlencoded',
-                data: $('#submitform').serialize(),                   // data冒号后面接的是json对象
-                contentType: "application/x-www-form-urlencoded; charset=UTF-8", // 设置请求参数以什么方式传输，如application/json，application/x-www-form-urlencoded，application/form-data
-                success:function(data) {
-                    if(data.code == 200 ) {
-                        layui.layer.msg("修改成功！"+JSON.stringify(data));
-                    } else {
-                        layui.layer.msg("修改失败！"+JSON.stringify(data));
-                    }
+    $("#submitform").on("submit", function(ev) {
+        new AjaxReq({
+            type: "post",
+            checkTokenExists: false,
+            noLoginJumpLoginPage: false,
+            url: '${Request.basePath!""}/v1/jquery-ajax/x-www-form-urlencoded',
+            data: $('#submitform').serialize(),                   // data冒号后面接的是json对象
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8", // 设置请求参数以什么方式传输，如application/json，application/x-www-form-urlencoded，application/form-data
+            success:function(data) {
+                if(data.code == 200 ) {
+                    layui.layer.msg("修改成功！"+JSON.stringify(data));
+                } else {
+                    layui.layer.msg("修改失败！"+JSON.stringify(data));
                 }
-            });
-
-            ev.preventDefault();
-            // 或者return false
+            }
         });
 
-        // get请求
-        $("#submitform").on("submit", function(ev) {
-            new AjaxReq({
-                type: "get",
-                url: '${Request.basePath!""}/v1/jquery-ajax/get',
-                carryToken: false,
-                data: $('#submitform').serialize(),                   // data冒号后面接的是json对象
-                success:function(data) {
-                    if(data.code == 200 ) {
-                        layui.layer.msg("修改成功！"+JSON.stringify(data));
-                    } else {
-                        layui.layer.msg("修改失败！"+JSON.stringify(data));
-                    }
+        new AjaxReq({
+            type: "get",
+            url: '${Request.basePath!""}/v1/jquery-ajax/get',
+            checkTokenExists: false,
+            noLoginJumpLoginPage: false,
+            data: $('#submitform').serialize(),                   // data冒号后面接的是json对象
+            success:function(data) {
+                if(data.code == 200 ) {
+                    layui.layer.msg("修改成功！"+JSON.stringify(data));
+                } else {
+                    layui.layer.msg("修改失败！"+JSON.stringify(data));
                 }
-            });
-
-            // 阻止submit表单提交
-            ev.preventDefault();
-            // 或者return false
+            }
         });
-    })()
+
+        ev.preventDefault();
+        // 或者return false
+    });
 
 </script>
 

@@ -29,7 +29,7 @@ public class AESController {
         System.out.println("AES/CBC/PKCS5Padding方式  ===>>>  "+loginParams.getUsername()+"  解密后===>>>  "+ aesIV.decryptStr(loginParams.getUsername()));
         System.out.println("AES/CBC/PKCS5Padding方式  ===>>>  "+loginParams.getPassword()+"  解密后===>>>  "+ aesIV.decryptStr(loginParams.getPassword()));
 
-        return Result.build(loginParams);
+        return Result.success(loginParams);
     }
 
     //  "AES/ECB/PKCS5Padding"
@@ -40,7 +40,7 @@ public class AESController {
         }
         System.out.println("AES/ECB/PKCS5Padding方式  ===>>>  "+loginParams.getUsername()+"  解密后===>>>  "+ aesNoIV.decryptStr(loginParams.getUsername()));
         System.out.println("AES/ECB/PKCS5Padding方式  ===>>>  "+loginParams.getPassword()+"  解密后===>>>  "+ aesNoIV.decryptStr(loginParams.getPassword()));
-        return Result.build(loginParams);
+        return Result.success(loginParams);
     }
 
     public static class LoginParams {

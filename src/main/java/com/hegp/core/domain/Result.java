@@ -29,9 +29,8 @@ public class Result<T extends Object> implements Serializable {
      * 构建 成功的响应对象
      *
      * @param data 响应数据
-     * @return tech.ascs.citywork.domain.net.Result
      */
-    public static Result build(Object data) {
+    public static Result success(Object data) {
         Result response = new Result();
         response.data = data;
         response.code = HttpStatus.OK.value();
@@ -43,7 +42,6 @@ public class Result<T extends Object> implements Serializable {
      *
      * @param code 状态码
      * @param msg 服务端提示信息
-     * @return tech.ascs.citywork.domain.net.Result
      */
     public static Result build(int code, String msg) {
         Result response = new Result();
@@ -58,27 +56,12 @@ public class Result<T extends Object> implements Serializable {
      * @param data 响应数据
      * @param code 提示信息
      * @param msg 服务端提示信息
-     * @return tech.ascs.citywork.domain.net.Result
      */
     public static Result build(Object data, int code, String msg) {
         Result response = new Result();
         response.data = data;
         response.code = code;
         response.msg = msg;
-        return response;
-    }
-
-    /**
-     * 构建 响应对象
-     *
-     * @param data 响应数据
-     * @param code 提示信息
-     * @return tech.ascs.citywork.domain.net.Result
-     */
-    public static Result build(Object data, int code) {
-        Result response = new Result();
-        response.data = data;
-        response.code = code;
         return response;
     }
 

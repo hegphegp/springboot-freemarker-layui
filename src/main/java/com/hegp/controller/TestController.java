@@ -21,7 +21,7 @@ public class TestController {
         map.put("field01", field01);
         map.put("field02", field02);
         map.put("field03", field03);
-        return Result.build(map);
+        return Result.success(map);
     }
 
     @PostMapping(value = "/post01")
@@ -32,7 +32,7 @@ public class TestController {
         map.put("field01", field01);
         map.put("field02", field02);
         map.put("field03", field03);
-        return Result.build(map);
+        return Result.success(map);
     }
 
     @PostMapping(value = "/post02")
@@ -43,7 +43,7 @@ public class TestController {
         map.put("field01", field01);
         map.put("field02", field02);
         map.put("field03", field03);
-        return Result.build(map);
+        return Result.success(map);
     }
 
     @PutMapping(value = "/put01/{id}")
@@ -56,7 +56,7 @@ public class TestController {
         map.put("field01", field01);
         map.put("field02", field02);
         map.put("field03", field03);
-        return Result.build(map);
+        return Result.success(map);
     }
 
     @PutMapping(value = "/put02/{id}")
@@ -69,7 +69,7 @@ public class TestController {
         map.put("field01", field01);
         map.put("field02", field02);
         map.put("field03", field03);
-        return Result.build(map);
+        return Result.success(map);
     }
 
     @PutMapping(value = "/delete01/{id}")
@@ -82,7 +82,7 @@ public class TestController {
         map.put("field01", field01);
         map.put("field02", field02);
         map.put("field03", field03);
-        return Result.build(map);
+        return Result.success(map);
     }
 
 }

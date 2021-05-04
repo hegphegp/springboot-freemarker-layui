@@ -16,7 +16,7 @@ public class ParamConverterController {
         Map map = new HashMap();
         map.put("date", date);
         System.out.println(map);
-        return Result.build(map);
+        return Result.success(map);
     }
 
     @GetMapping(value = "/test-str-date")
@@ -25,14 +25,14 @@ public class ParamConverterController {
         Date date = new Date();
         Map map = new HashMap();
         map.put("date", date);
-        return Result.build(map);
+        return Result.success(map);
     }
 
     @GetMapping(value = "/test-default-value-now-date")
     public Result testDefaultValueNowDate(@RequestParam(name="date", defaultValue = "now") Date date) {
         Map map = new HashMap();
         map.put("date", date);
-        return Result.build(map);
+        return Result.success(map);
     }
 
 }
