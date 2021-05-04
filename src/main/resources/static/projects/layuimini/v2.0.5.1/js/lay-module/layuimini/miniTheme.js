@@ -287,7 +287,7 @@ layui.define(["jquery", "layer"], function (exports) {
          */
         buildThemeCss: function (bgcolorId) {
             if (!bgcolorId) {
-                return false;
+                bgcolorId = 4;
             }
             var bgcolorData = miniTheme.config(bgcolorId);
             var styleHtml = '/*头部右侧背景色 headerRightBg */\n' +

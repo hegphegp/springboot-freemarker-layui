@@ -1,13 +1,13 @@
 layui.define(['layer', 'form', 'laytpl'], function (exports) {
     "use strict";
 
-    let $ = layui.$
+    var $ = layui.$
         , form = layui.form
         , layarea = {
         _id: 0
         , config: {}
         , set: function (options) {
-            let that = this;
+            var that = this;
             that.config = $.extend({}, that.config, options);
             return that;
         }
@@ -16,7 +16,7 @@ layui.define(['layer', 'form', 'laytpl'], function (exports) {
         }
     }
         , thisArea = function () {
-        let that = this;
+        var that = this;
         return {
             layarea: function (files) {
                 that.layarea.call(that, files);
@@ -25,12 +25,12 @@ layui.define(['layer', 'form', 'laytpl'], function (exports) {
         }
     }
         , Class = function (options) {
-        let that = this;
+        var that = this;
         that.config = $.extend({}, that.config, layarea.config, options);
         that.render();
     };
 
-    let areaList = {
+    var areaList = {
         province_list: {
             110000: '北京市',
             120000: '天津市',
@@ -3832,7 +3832,7 @@ layui.define(['layer', 'form', 'laytpl'], function (exports) {
     Class.prototype.index = 0;
 
     Class.prototype.render = function () {
-        let that = this, options = that.config;
+        var that = this, options = that.config;
         options.elem = $(options.elem);
         options.bindAction = $(options.bindAction);
 
@@ -3840,14 +3840,14 @@ layui.define(['layer', 'form', 'laytpl'], function (exports) {
     };
 
     Class.prototype.events = function () {
-        let that = this, options = that.config, index;
-        let provinceFilter = 'province-' + layarea._id;
-        let cityFilter = 'city-' + layarea._id;
-        let countyFilter = 'county-' + layarea._id;
+        var that = this, options = that.config, index;
+        var provinceFilter = 'province-' + layarea._id;
+        var cityFilter = 'city-' + layarea._id;
+        var countyFilter = 'county-' + layarea._id;
 
-        let provinceEl = options.elem.find('.province-selector');
-        let cityEl = options.elem.find('.city-selector');
-        let countyEl = options.elem.find('.county-selector');
+        var provinceEl = options.elem.find('.province-selector');
+        var cityEl = options.elem.find('.city-selector');
+        var countyEl = options.elem.find('.county-selector');
 
         //filter
         if(provinceEl.attr('lay-filter')){
@@ -3870,7 +3870,7 @@ layui.define(['layer', 'form', 'laytpl'], function (exports) {
         }
         if(cityEl.data('value')){
             options.data.city = cityEl.data('value');
-            let code = getCode('city', options.data.city, options.data.provinceCode.slice(0, 2));
+            var code = getCode('city', options.data.city, options.data.provinceCode.slice(0, 2));
             options.data.cityCode = code;
         }
         if(countyEl.data('value')){
@@ -3910,10 +3910,10 @@ layui.define(['layer', 'form', 'laytpl'], function (exports) {
 
         //查找province
         function renderProvince(){
-            let tpl = '<option value="">--选择省--</option>';
-            let provinceList = getList("province");
-            let currentCode = '';
-            let currentName = '';
+            var tpl = '<option value="">--选择省--</option>';
+            var provinceList = getList("province");
+            var currentCode = '';
+            var currentName = '';
             provinceList.forEach(function(_item){
                 // if (!currentCode){
                 //   currentCode = _item.code;
@@ -3932,10 +3932,10 @@ layui.define(['layer', 'form', 'laytpl'], function (exports) {
         }
 
         function renderCity(provinceCode){
-            let tpl = '<option value="">--选择市--</option>';
-            let cityList = getList('city', provinceCode.slice(0, 2));
-            let currentCode = '';
-            let currentName = '';
+            var tpl = '<option value="">--选择市--</option>';
+            var cityList = getList('city', provinceCode.slice(0, 2));
+            var currentCode = '';
+            var currentName = '';
             cityList.forEach(function(_item){
                 // if (!currentCode){
                 //   currentCode = _item.code;
@@ -3955,10 +3955,10 @@ layui.define(['layer', 'form', 'laytpl'], function (exports) {
         }
 
         function renderCounty(cityCode){
-            let tpl = '<option value="">--选择区--</option>';
-            let countyList = getList('county', cityCode.slice(0, 4));
-            let currentCode = '';
-            let currentName = '';
+            var tpl = '<option value="">--选择区--</option>';
+            var countyList = getList('county', cityCode.slice(0, 4));
+            var currentCode = '';
+            var currentName = '';
             countyList.forEach(function(_item){
                 // if (!currentCode){
                 //   currentCode = _item.code;
@@ -3978,13 +3978,13 @@ layui.define(['layer', 'form', 'laytpl'], function (exports) {
         }
 
         function getList(type, code) {
-            let result = [];
+            var result = [];
 
             if (type !== 'province' && !code) {
                 return result;
             }
 
-            let list = areaList[type + "_list"] || {};
+            var list = areaList[type + "_list"] || {};
             result = Object.keys(list).map(function (code) {
                 return {
                     code: code,
@@ -4007,9 +4007,9 @@ layui.define(['layer', 'form', 'laytpl'], function (exports) {
         }
 
         function getCode(type, name, parentCode = 0){
-            let code = '';
-            let list = areaList[type + "_list"] || {};
-            let result = {};
+            var code = '';
+            var list = areaList[type + "_list"] || {};
+            var result = {};
             Object.keys(list).map(function (_code) {
                 if(parentCode){
                     if(_code.indexOf(parentCode) === 0){
@@ -4030,7 +4030,7 @@ layui.define(['layer', 'form', 'laytpl'], function (exports) {
     };
 
     layarea.render = function (options) {
-        let inst = new Class(options);
+        var inst = new Class(options);
         layarea._id++;
         return thisArea.call(inst);
     };

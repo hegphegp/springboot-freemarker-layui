@@ -23,6 +23,23 @@
     <![endif]-->
     <style id="layuimini-bg-color">
     </style>
+    <style>
+        .layui-layout-admin .layui-side {
+            width: 235px;
+        }
+        .layui-layout-admin .layui-logo {
+            width: 235px;
+        }
+        .layui-nav-tree {
+            width: 235px;
+        }
+        .layuimini-tool {
+            left: 250px;
+        }
+        .layui-body {
+            left: 235px;
+        }
+    </style>
 </head>
 <body class="layui-layout-body layuimini-all">
 <div class="layui-layout layui-layout-admin">
@@ -141,7 +158,7 @@
             clearUrl: "api/clear.json", // 缓存清理接口
             urlHashLocation: true,      // 是否打开hash定位
             bgColorDefault: false,      // 主题默认配置
-            multiModule: true,          // 是否开启多模块
+            multiModule: false,         // 是否开启多模块
             menuChildOpen: false,       // 是否默认展开菜单
             loadingTime: 0,             // 初始化加载时间
             pageAnim: true,             // iframe窗口动画

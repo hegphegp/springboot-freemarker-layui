@@ -37,12 +37,9 @@ layui.define(["element","laytpl" ,"jquery"], function (exports) {
          */
         renderSingleModule: function (menuList, menuChildOpen) {
             menuList = menuList || [];
-            var leftMenuHtml = '',
-                childOpenClass = '',
-                leftMenuCheckDefault = 'layui-this';
-            var me = this ;
+            var childOpenClass = '';
             if (menuChildOpen) childOpenClass = ' layui-nav-itemed';
-            leftMenuHtml = this.renderLeftMenu(menuList,{ childOpenClass:childOpenClass }) ;
+            var leftMenuHtml = this.renderLeftMenu(menuList,{ childOpenClass:childOpenClass }) ;
             $('.layui-layout-body').addClass('layuimini-single-module'); //单模块标识
             $('.layuimini-header-menu').remove();
             $('.layuimini-menu-left').html(leftMenuHtml);
