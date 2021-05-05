@@ -6,7 +6,6 @@
     <script src="${Request.basePath!""}/plugins/jquery/v1.12.4/jquery.min.js"></script>
     <script src="${Request.basePath!""}/plugins/layui/v2.4.5/layui.all.js"></script>
 </head>
-</head>
 <body>
 
 <form action="" id='submitform'>
